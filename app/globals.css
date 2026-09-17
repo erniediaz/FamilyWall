@@ -23,3 +23,31 @@ body{background:#000}
 .connecting{background:rgba(7,8,19,.88)}
 @keyframes nebula-drift{0%{transform:translate3d(-1%,-.6%,0) scale(1.02)}50%{transform:translate3d(.6%,.8%,0) scale(1.055)}100%{transform:translate3d(1%,-.3%,0) scale(1.025)}}
 @media(prefers-reduced-motion:reduce){.wall::before{animation:none;transform:none;will-change:auto}}
+
+/* Clip the oversized animated backdrop without creating page scrollbars. */
+.wall{overflow:clip}
+@media(min-width:761px){
+  body{height:100vh;height:100dvh;overflow:hidden}
+  .wall{height:100vh;height:100dvh;min-height:0}
+  .top,.forecast,footer,.demo-banner{flex-shrink:0}
+  .main-grid{flex:1 1 0;min-height:0;grid-template-rows:minmax(0,1fr)}
+  .calendar,.week,.day,.photo-panel{min-height:0}
+  .section-heading,.day-heading,.photo-caption{flex-shrink:0}
+  .week{grid-template-rows:minmax(0,1fr)}
+  .day{display:flex;flex-direction:column}
+  .events{flex:1 1 0;min-height:0;max-height:none;overflow-y:auto}
+  .events>*{flex-shrink:0}
+  .photo-frame{min-height:0;flex:1 1 0}
+  .photo-empty{max-height:100%;overflow:auto}
+  footer .status{min-width:0;overflow-wrap:anywhere}
+}
+@media(min-width:761px) and (max-height:800px){
+  .wall{padding:16px 24px 10px;gap:12px}
+  .top{padding-bottom:12px}
+  .section-heading{margin-bottom:10px}
+  .day-heading{min-height:90px;padding:10px 6px 6px}
+  .day-heading strong{font-size:28px}
+  .forecast{padding-top:12px}
+  .forecast-day{gap:5px 8px}
+  .photo-caption{padding-top:8px}
+}

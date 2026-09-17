@@ -12,6 +12,8 @@ The project is designed to run locally on a Raspberry Pi connected to an HDMI mo
 - Monday-to-Sunday weekly calendar with timed, all-day, and recurring events
 - Private iCloud calendar access through CalDAV
 - Rotating still photos from a dedicated iCloud Shared Album
+- Photos shuffle when the dashboard opens; routine updates preserve the order
+- Desktop layout fits the screen height, with scrolling inside busy calendar days
 - Current conditions and a five-day Fahrenheit forecast from Open-Meteo
 - Two configurable daily monitor-on windows
 - One-hour wake override and resume-schedule control
@@ -154,6 +156,7 @@ Run the backend tests and shell syntax checks:
 
 ```sh
 python3 -m unittest discover -s tests
+node --experimental-strip-types --test tests/photo-order.test.mjs
 bash -n pi/install.sh pi/kiosk.sh
 ```
 

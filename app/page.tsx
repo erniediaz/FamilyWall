@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { CalendarDays, CloudSun, Settings, Sun, Cloud, CloudRain, Snowflake, CloudLightning, Image as ImageIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { photoOrder } from '@/lib/photo-order';
 
 type Event = {id:string; title:string; start:string; end:string; allDay:boolean; location:string};
 type SettingsData = {windows:string[][]; photo_seconds:number};
@@ -16,7 +17,7 @@ function WeatherIcon({code=0}:{code?:number}){const Icon=code===0?Sun:code<=2?Cl
 function includesDay(e:Event,day:string){if(e.allDay)return day>=e.start && day<e.end;const start=localDay(new Date(e.start));const end=localDay(new Date(Math.max(Date.parse(e.start),Date.parse(e.end)-1)));return day>=start&&day<=end}
 export default function Home(){
  const [data,setData]=useState<Data|null>(null),[now,setNow]=useState<Date|null>(null),[offline,setOffline]=useState(false),[photo,setPhoto]=useState(0),[settingsOpen,setSettingsOpen]=useState(false),[form,setForm]=useState<SettingsData>({windows:[['06:00','08:30'],['16:30','19:00']],photo_seconds:60}),[notice,setNotice]=useState(''),[busy,setBusy]=useState(false);
- async function refresh(){try{const r=await fetch('/api/state',{cache:'no-store'});if(!r.ok)throw Error();const value=await r.json() as Data;setData(value);setOffline(false)}catch{setOffline(true)}}
+ async function refresh(){try{const r=await fetch('/api/state',{cache:'no-store'});if(!r.ok)throw Error();const value=await r.json() as Data;setData(previous=>({...value,photos:photoOrder(value.photos,previous?.photos)}));setOffline(false)}catch{setOffline(true)}}
  useEffect(()=>{setNow(new Date());refresh();const a=setInterval(()=>setNow(new Date()),1000),b=setInterval(refresh,15000);return()=>{clearInterval(a);clearInterval(b)}},[]);
  useEffect(()=>{const id=setInterval(()=>setPhoto(p=>p+1),1000*(data?.settings.photo_seconds||60));return()=>clearInterval(id)},[data?.settings.photo_seconds]);
  useEffect(()=>{const id=setInterval(()=>{document.querySelectorAll('.events').forEach(el=>{if(el.scrollHeight>el.clientHeight){el.scrollTop=el.scrollTop+el.clientHeight>=el.scrollHeight-4?0:el.scrollTop+Math.floor(el.clientHeight*.7)}})},20000);return()=>clearInterval(id)},[]);
