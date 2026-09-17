@@ -1,0 +1,343 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Account-neutral guide to a Raspberry Pi family wall with iCloud calendar, photos, weather, and monitor scheduling."><title>Family Wall • Setup Guide</title><style>
+:root{color-scheme:light;--ink:#203138;--muted:#607179;--paper:#fffefa;--accent:#136b64;--line:#dbe4df;--nav:#132b31}*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:35px}body{margin:0;background:#f0f3ee;color:var(--ink);font:17px/1.7 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}a{color:var(--accent);text-underline-offset:3px}a:focus-visible,button:focus-visible,select:focus-visible{outline:3px solid #de9b3e;outline-offset:4px}.skip{position:fixed;top:-80px;left:20px;z-index:30;background:white;padding:10px}.skip:focus{top:10px}aside{position:fixed;inset:0 auto 0 0;width:292px;background:var(--nav);color:#e1ebe7;padding:32px 20px 24px;overflow-y:auto}.brand{font-size:22px;font-weight:750;letter-spacing:-.6px;color:#fff}.eyebrow{text-transform:uppercase;letter-spacing:2px;font-size:11px;font-weight:700;color:#90c6b7;margin:0 0 8px}.nav-note{font-size:12px;color:#adc1c4;margin:10px 0 24px}.toc{list-style:none;padding:0;margin:0}.toc li{margin:0 0 5px}.toc a{display:block;text-decoration:none;font-size:13px;line-height:1.5;color:#c8d8d6;padding:8px 10px;border-radius:6px;border-left:3px solid transparent}.toc a:hover,.toc a.active{background:#264147;color:white;border-left-color:#89d7b9}.nav-footer{font-size:12px;margin-top:28px;padding-top:15px;border-top:1px solid #375057;color:#abc2c4}.nav-footer a{color:#c1e6d8}main{margin-left:292px;padding:54px 6vw 80px}article{max-width:900px;margin:auto;background:var(--paper);padding:50px 60px 70px;border:1px solid var(--line);border-radius:12px;box-shadow:0 12px 50px #153a3010}h1,h2,h3{line-height:1.2;letter-spacing:-.035em}h1{font-size:clamp(34px,4vw,52px);margin:18px 0 25px;max-width:780px}h2{font-size:27px;margin:56px 0 20px;padding-top:24px;border-top:1px solid var(--line)}h3{font-size:20px;margin:32px 0 12px}p{margin:16px 0}li{margin:9px 0}ul,ol{padding-left:25px}strong{font-weight:700}code{font: .87em/1.6 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;background:#eaf0e9;padding:2px 5px;border-radius:4px;overflow-wrap:anywhere}.code-wrap{margin:24px 0;border:1px solid #cedbd4;border-radius:8px;overflow:hidden;background:#f2f6f0}.code-head{display:flex;justify-content:space-between;align-items:center;padding:7px 14px;background:#e5ede5;color:#52665b;font:12px/1.5 system-ui}.copy{font:inherit;border:1px solid #baccc0;border-radius:4px;background:#fffefa;color:#234e3f;padding:4px 10px;cursor:pointer}pre{margin:0;padding:19px;overflow:auto;tab-size:4}pre code{font-size:12.5px;line-height:1.7;white-space:pre;background:none;padding:0;border-radius:0;overflow-wrap:normal}.doc-tag{display:inline-block;font-size:11px;letter-spacing:1.7px;text-transform:uppercase;font-weight:750;color:var(--accent);border:1px solid #b9d2c4;padding:5px 9px;border-radius:4px}.toolbar{display:flex;gap:15px;justify-content:space-between;align-items:center;margin-bottom:30px;flex-wrap:wrap}.toolbar button{background:transparent;border:0;color:var(--accent);text-decoration:underline;text-underline-offset:3px;cursor:pointer;font:13px system-ui}.mobile-nav{display:none}.endnote{border-top:1px solid var(--line);margin-top:50px;padding-top:20px;font-size:13px;color:var(--muted)}@media(min-width:1600px){main{padding-left:9vw;padding-right:9vw}}@media(max-width:1050px){aside{width:255px}main{margin-left:255px;padding:30px}article{padding:35px}}@media(max-width:760px){html{scroll-padding-top:100px}aside{display:none}.mobile-nav{position:sticky;top:0;display:block;background:var(--nav);padding:12px 18px;z-index:10;color:white}.mobile-nav label{font-size:11px;display:block;letter-spacing:1px;margin-bottom:5px}.mobile-nav select{width:100%;max-width:600px;font:14px system-ui;padding:9px;color:#203138;border-radius:5px;border:0}main{margin:0;padding:18px 10px 35px}article{border-radius:8px;padding:26px 20px}body{font-size:16px}h1{font-size:35px}h2{font-size:25px;margin-top:42px}pre{padding:13px}pre code{font-size:12px}.toolbar{margin-bottom:15px}}@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}@media print{body{font-size:10.5pt;background:white;color:black}aside,.mobile-nav,.toolbar,.skip,.copy{display:none!important}main{margin:0;padding:0}article{max-width:none;border:0;border-radius:0;box-shadow:none;padding:0}h1{font-size:26pt}h2{font-size:18pt;break-after:avoid;margin-top:25px}h3{break-after:avoid}a{color:inherit}pre{white-space:pre-wrap;overflow:visible}pre code{white-space:pre-wrap;font-size:8pt}.code-wrap{break-inside:avoid}p,li{orphans:3;widows:3}}
+</style></head>
+<body><a class="skip" href="#content">Skip to content</a><aside aria-label="Document navigation"><p class="eyebrow">At home / Made with AI</p><div class="brand">Family Wall</div><p class="nav-note">A practical guide to a useful household screen.</p><nav aria-label="Contents"><ul class="toc"><li><a href="#1-what-you-are-building">1. What you are building</a></li><li><a href="#2-before-you-begin-save-the-software">2. Before you begin: save the software</a></li><li><a href="#3-hardware-and-account-checklist">3. Hardware and account checklist</a></li><li><a href="#4-prepare-headless-access">4. Prepare headless access</a></li><li><a href="#5-verify-the-desktop-and-monitor-control">5. Verify the desktop and monitor control</a></li><li><a href="#6-prepare-apple-calendar-and-photos">6. Prepare Apple calendar and photos</a></li><li><a href="#7-configure-the-household-without-embedding-credentials">7. Configure the household without embedding credentials</a></li><li><a href="#8-transfer-and-install-the-application">8. Transfer and install the application</a></li><li><a href="#9-enable-startup-and-verify-the-result">9. Enable startup and verify the result</a></li><li><a href="#10-daily-operation-and-expected-timing">10. Daily operation and expected timing</a></li><li><a href="#11-maintenance-and-troubleshooting">11. Maintenance and troubleshooting</a></li><li><a href="#12-adapt-rebuild-and-package-for-another-household">12. Adapt, rebuild, and package for another household</a></li><li><a href="#13-how-the-components-fit-together">13. How the components fit together</a></li><li><a href="#14-reusable-ai-build-prompt">14. Reusable AI build prompt</a></li><li><a href="#15-references-and-credits">15. References and credits</a></li></ul></nav><div class="nav-footer">Account-neutral edition<br>September 2026<br><a href="#content">Back to top ↑</a></div></aside><div class="mobile-nav"><label for="jump">CONTENTS</label><select id="jump"><option value="1-what-you-are-building">1. What you are building</option><option value="2-before-you-begin-save-the-software">2. Before you begin: save the software</option><option value="3-hardware-and-account-checklist">3. Hardware and account checklist</option><option value="4-prepare-headless-access">4. Prepare headless access</option><option value="5-verify-the-desktop-and-monitor-control">5. Verify the desktop and monitor control</option><option value="6-prepare-apple-calendar-and-photos">6. Prepare Apple calendar and photos</option><option value="7-configure-the-household-without-embedding-credentials">7. Configure the household without embedding credentials</option><option value="8-transfer-and-install-the-application">8. Transfer and install the application</option><option value="9-enable-startup-and-verify-the-result">9. Enable startup and verify the result</option><option value="10-daily-operation-and-expected-timing">10. Daily operation and expected timing</option><option value="11-maintenance-and-troubleshooting">11. Maintenance and troubleshooting</option><option value="12-adapt-rebuild-and-package-for-another-household">12. Adapt, rebuild, and package for another household</option><option value="13-how-the-components-fit-together">13. How the components fit together</option><option value="14-reusable-ai-build-prompt">14. Reusable AI build prompt</option><option value="15-references-and-credits">15. References and credits</option></select></div><main id="content"><article><div class="toolbar"><span class="doc-tag">Repeatable setup guide</span><button id="print" type="button">Print / Save PDF</button></div><h1 id="build-a-family-wall-with-raspberry-pi-and-icloud">Build a Family Wall with Raspberry Pi and iCloud</h1>
+<p>A repeatable setup guide for a weekly calendar, rotating family photos, local weather, and a scheduled display.</p>
+<p>Prepared September 16, 2026. Account names, network addresses, album links, credentials, and family photos have been removed. Commands use placeholders where you must supply your own information.</p>
+<h2 id="1-what-you-are-building">1. What you are building</h2>
+<p>A Raspberry Pi drives a monitor over HDMI. Chromium displays a local dashboard in full-screen kiosk mode. A Python service retrieves calendar events, photos, and weather, and controls when the monitor sleeps.</p>
+<p>The design includes:</p>
+<ul>
+<li>A Sunday–Saturday weekly calendar with timed and all-day events.</li>
+<li>One shared iCloud calendar, read using CalDAV, Apple&#x27;s calendar access protocol.</li>
+<li>A dedicated iCloud Shared Album, with a photo changing every 60 seconds by default.</li>
+<li>Current weather and a five-day forecast in Fahrenheit from Open-Meteo.</li>
+<li>A black starfield with pink, blue, purple, and subtle green nebulas. The background image slowly drifts; it is not a live space simulation.</li>
+<li>Two daily screen-on windows, with the same hours every day.</li>
+<li>A private local link for changing the schedule and photo interval from a phone.</li>
+<li>Cached content for temporary internet outages.</li>
+</ul>
+<p>The Pi stays powered on. Only the monitor goes to sleep. This lets the Pi continue refreshing data and wake the display later.</p>
+<h2 id="2-before-you-begin-save-the-software">2. Before you begin: save the software</h2>
+<p>This is a custom application, not a feature included with Raspberry Pi OS. To reinstall it, retain a copy of the application installer ZIP. To change its title, location labels, time zone, or design, also retain the complete source project and its dependency lockfile.</p>
+<p>This documentation bundle does not include the application. The original installer was personalized for a household. Keep that installer private: it can contain a household name, location, and a public album URL even though it excludes passwords and downloaded photos. Follow Section 12 before preparing a version for another household or publishing source code.</p>
+<p>For the installation commands below, name your private installer copy <code>family-wall.zip</code>. Its internal top-level folder should be <code>family-wall</code>, containing <code>install.sh</code>, <code>server.py</code>, <code>photos.py</code>, <code>kiosk.sh</code>, and <code>web/</code>.</p>
+<p>Keep these items together in a private backup:</p>
+<ul>
+<li>The installer ZIP for the version you use.</li>
+<li>The source project, including <code>app/</code>, <code>public/</code>, <code>pi/</code>, <code>scripts/</code>, <code>package.json</code>, and the dependency lockfile.</li>
+<li>This guide and a short note of your chosen time zone and display settings.</li>
+<li>An encrypted backup of your Pi configuration if you want to preserve credentials and settings. Do not put that configuration in a public repository or documentation bundle.</li>
+</ul>
+<h2 id="3-hardware-and-account-checklist">3. Hardware and account checklist</h2>
+<p>The reference hardware was a Raspberry Pi 3 Model B connected by HDMI to an LG 27UN850. Other monitors need their own sleep/wake test.</p>
+<p>You need:</p>
+<ul>
+<li>A Raspberry Pi, its appropriate power supply, a microSD card, and an HDMI cable compatible with the Pi.</li>
+<li>A monitor with HDMI input.</li>
+<li>A Mac or another computer on the same home network.</li>
+<li>A microSD reader if preparing or repairing the operating system.</li>
+<li>Raspberry Pi OS with the desktop. The tested software environment used Debian 13 “Trixie,” 64-bit ARM, Chromium, and the labwc Wayland desktop.</li>
+<li>An Apple Account with access to the shared calendar and permission to prepare the photo album.</li>
+<li>Internet access for Apple services, weather, and initial package installation.</li>
+</ul>
+<p>For a fresh desktop installation, Raspberry Pi recommends a card of at least 32 GB. Follow its current board-specific power and installation guidance: <a href="https://www.raspberrypi.com/documentation/computers/getting-started.html">Raspberry Pi getting started</a>.</p>
+<p>A 1080p dashboard is a sensible starting point for a Pi 3, even when the monitor supports 4K. The kiosk script requests 1920 × 1080 when the monitor advertises that mode. Actual smoothness must be checked on the Pi.</p>
+<h2 id="4-prepare-headless-access">4. Prepare headless access</h2>
+<p>“Headless” means configuring the Pi without a keyboard or mouse attached to it. The monitor can still be connected.</p>
+<h3 id="fresh-operating-system">Fresh operating system</h3>
+<ol>
+<li>Use Raspberry Pi Imager on your computer and choose Raspberry Pi OS with desktop for your board.</li>
+<li>Set a hostname, a username, and a strong Pi login password in the customization options.</li>
+<li>Configure your Wi-Fi, or connect the Pi to the router with Ethernet.</li>
+<li>Enable SSH, the remote terminal service, in the Imager settings.</li>
+<li>Write the card, insert it in the Pi, connect HDMI and power, and allow the first boot to finish.</li>
+</ol>
+<p>Writing an operating system image erases the selected card. Do this only for a fresh installation or an intentional rebuild with your files backed up.</p>
+<h3 id="existing-operating-system">Existing operating system</h3>
+<p>Do not re-image a working Pi just to install the dashboard. First try connecting to its existing SSH service. If SSH was never enabled, Raspberry Pi OS supports enabling it with an empty file named <code>ssh</code> in the boot partition. That method does not create a username or configure Wi-Fi; those must already exist. Consult the official instructions for your setup before changing the card: <a href="https://www.raspberrypi.com/documentation/computers/remote-access.html">Raspberry Pi remote access</a>.</p>
+<h3 id="find-and-connect-to-the-pi">Find and connect to the Pi</h3>
+<p>Open your router&#x27;s connected-device list and find the Pi&#x27;s current address. A hostname ending in <code>.local</code> may also work, but the router&#x27;s address is useful when name discovery fails.</p>
+<p>On the Mac, replace both uppercase placeholders, then run:</p>
+<div class="code-wrap"><div class="code-head"><span>sh</span><button type="button" class="copy" data-copy="code-1">Copy</button></div><pre><code id="code-1">ssh PI_USER@PI_ADDRESS</code></pre></div>
+<p>On the first connection, verify the device you are connecting to and accept its host key. Enter the Pi login password when prompted; passwords do not appear as you type.</p>
+<p>After login, the terminal is running commands on the Pi. A prompt containing your Pi username and hostname helps distinguish it from a local Mac terminal.</p>
+<p>A successful ping only shows that a device answers on the network. It does not prove that SSH is enabled or that the device is your Pi. SSH “connection refused” usually points to a disabled service; a timeout suggests the address, network, or firewall needs checking. A router DHCP reservation helps keep the Pi&#x27;s address stable.</p>
+<h2 id="5-verify-the-desktop-and-monitor-control">5. Verify the desktop and monitor control</h2>
+<p>Run these commands in the Pi SSH terminal:</p>
+<div class="code-wrap"><div class="code-head"><span>sh</span><button type="button" class="copy" data-copy="code-2">Copy</button></div><pre><code id="code-2">cat /etc/os-release
+uname -m
+command -v chromium
+systemctl get-default
+pgrep -a labwc
+command -v wlopm</code></pre></div>
+<p>For the reference setup, the useful results were a 64-bit ARM system (<code>aarch64</code>), Chromium installed, <code>graphical.target</code>, and a running labwc process. The installer adds <code>wlopm</code> if it is missing.</p>
+<p>Check the desktop socket:</p>
+<div class="code-wrap"><div class="code-head"><span>sh</span><button type="button" class="copy" data-copy="code-3">Copy</button></div><pre><code id="code-3">ls /run/user/$(id -u)/wayland-*</code></pre></div>
+<p>The script currently expects <code>wayland-0</code>. A file ending in <code>.lock</code> is not the socket. If your desktop uses another socket name, adjust the scripts described in Section 12 before installation.</p>
+<p>With the desktop visible on the HDMI monitor, test sleep and automatic wake. If necessary, first install the small control tool:</p>
+<div class="code-wrap"><div class="code-head"><span>sh</span><button type="button" class="copy" data-copy="code-4">Copy</button></div><pre><code id="code-4">sudo apt-get update
+sudo apt-get install -y wlopm</code></pre></div>
+<p>Then run:</p>
+<div class="code-wrap"><div class="code-head"><span>sh</span><button type="button" class="copy" data-copy="code-5">Copy</button></div><pre><code id="code-5">export XDG_RUNTIME_DIR=/run/user/$(id -u)
+export WAYLAND_DISPLAY=wayland-0
+wlopm --off &#x27;*&#x27;
+sleep 15
+wlopm --on &#x27;*&#x27;</code></pre></div>
+<p>Keep the SSH connection open until the wake command finishes. If the screen stays dark, run the last command again and check the monitor&#x27;s selected HDMI input.</p>
+<p>The compositor remains active while the output sleeps. labwc recommends <code>wlopm</code> for this purpose: <a href="https://labwc.github.io/integration.html">labwc integration guidance</a>.</p>
+<p>Do not continue to unattended scheduling until sleep and wake both work on your monitor.</p>
+<h2 id="6-prepare-apple-calendar-and-photos">6. Prepare Apple calendar and photos</h2>
+<h3 id="shared-calendar">Shared calendar</h3>
+<ol>
+<li>Create or select one shared calendar in Apple Calendar.</li>
+<li>Ensure the Apple Account used by the dashboard can see it and has accepted any sharing invitation.</li>
+<li>Give the calendar a unique name among that account&#x27;s calendars. The application matches its name exactly and rejects ambiguous matches.</li>
+<li>Add a temporary timed event, an all-day event, and a repeating event for later verification.</li>
+</ol>
+<p>The calendar remains private. This project does not require publishing a public calendar feed.</p>
+<h3 id="app-specific-password">App-specific password</h3>
+<p>The Python service signs in to Apple&#x27;s CalDAV service using your Apple Account email and an app-specific password. Generate a dedicated password in Apple Account settings under Sign-In and Security → App-Specific Passwords. Two-factor authentication is required. Enter the generated password only into the setup prompt on the Pi; do not paste it into chat or place it in a shell command.</p>
+<p>Apple allows individual revocation; changing your main Apple Account password also revokes existing app-specific passwords. See <a href="https://support.apple.com/en-us/102654">Apple&#x27;s app-specific password instructions</a>.</p>
+<p>The application only reads calendars, but the app-specific password itself is not restricted by this application to one calendar or to read-only access. Protect it accordingly.</p>
+<h3 id="dedicated-photo-album">Dedicated photo album</h3>
+<ol>
+<li>Create a dedicated iCloud Shared Album and add the still images you want displayed.</li>
+<li>Enable its Public Website option and copy the public link.</li>
+<li>Open that link without signing in to confirm it displays the intended album.</li>
+<li>Keep the link private and use only photos that everyone contributing is comfortable sharing through that link.</li>
+</ol>
+<p>Anyone with a Public Website link can view that album. It is separate from the private calendar sign-in: <a href="https://support.apple.com/guide/icloud/create-and-manage-shared-albums-mme985ae44d8/icloud">Apple Shared Album guidance</a>.</p>
+<p>The included photo connector supports links shaped like <code>https://photos.icloud.com/shared/album/ALBUM_TOKEN</code>. Older shared-album URL formats may require a different connector. It uses an unofficial public Apple interface, which could change; it is not an Apple-supported integration contract.</p>
+<h2 id="7-configure-the-household-without-embedding-credentials">7. Configure the household without embedding credentials</h2>
+<p>For a reinstall using your own unchanged private installer, existing configuration can be retained. For another household, prepare a neutral build using Section 12 first. A configuration override changes the data sources, but does not remove personal text or an embedded album URL from an old installer.</p>
+<p>The service stores settings in <code>~/.config/family-wall/config.json</code> on the Pi. The public installer asks for the calendar name, album link, and weather coordinates during setup. The following helper is optional: it lets you prepare or change those values before running the installer, without handling the Apple password.</p>
+<p>On an existing installation, stop the service before editing configuration so a settings update cannot overwrite your changes:</p>
+<div class="code-wrap"><div class="code-head"><span>sh</span><button type="button" class="copy" data-copy="code-6">Copy</button></div><pre><code id="code-6">systemctl --user stop family-wall.service</code></pre></div>
+<p>A “unit not found” message is expected on a fresh installation; proceed to the next step.</p>
+<p>Run this block on the Pi to create a temporary helper:</p>
+<div class="code-wrap"><div class="code-head"><span>sh</span><button type="button" class="copy" data-copy="code-7">Copy</button></div><pre><code id="code-7">cat &gt; /tmp/configure-family-wall.py &lt;&lt;&#x27;PYCONFIG&#x27;
+import json
+import math
+import os
+from pathlib import Path
+from urllib.parse import urlparse
+
+os.umask(0o077)
+folder = Path.home() / &#x27;.config&#x27; / &#x27;family-wall&#x27;
+folder.mkdir(parents=True, exist_ok=True, mode=0o700)
+path = folder / &#x27;config.json&#x27;
+config = json.loads(path.read_text()) if path.exists() else {}
+name = input(&#x27;Exact shared calendar name: &#x27;).strip()
+album = input(&#x27;Public shared album URL: &#x27;).strip()
+url = urlparse(album)
+if not name:
+    raise SystemExit(&#x27;A calendar name is required.&#x27;)
+if (url.scheme != &#x27;https&#x27; or url.netloc != &#x27;photos.icloud.com&#x27;
+        or not url.path.startswith(&#x27;/shared/album/&#x27;)
+        or not url.path.removeprefix(&#x27;/shared/album/&#x27;)):
+    raise SystemExit(&#x27;Use a supported photos.icloud.com shared album link.&#x27;)
+latitude = float(input(&#x27;Weather latitude, decimal degrees: &#x27;))
+longitude = float(input(&#x27;Weather longitude, decimal degrees: &#x27;))
+if not (math.isfinite(latitude) and -90 &lt;= latitude &lt;= 90
+        and math.isfinite(longitude) and -180 &lt;= longitude &lt;= 180):
+    raise SystemExit(&#x27;Coordinates are outside valid ranges.&#x27;)
+config.update(calendar_name=name, album_url=album,
+              latitude=latitude, longitude=longitude)
+config.setdefault(&#x27;windows&#x27;, [[&#x27;06:00&#x27;, &#x27;08:30&#x27;], [&#x27;16:30&#x27;, &#x27;19:00&#x27;]])
+config.setdefault(&#x27;photo_seconds&#x27;, 60)
+if path.exists():
+    backup = folder / &#x27;config.before-edit.json&#x27;
+    backup.write_bytes(path.read_bytes())
+    backup.chmod(0o600)
+temporary = folder / &#x27;config.manual.tmp&#x27;
+temporary.write_text(json.dumps(config, indent=2) + &#x27;\n&#x27;)
+temporary.chmod(0o600)
+temporary.replace(path)
+print(&#x27;Saved settings. Continue with the installer.&#x27;)
+PYCONFIG
+python3 /tmp/configure-family-wall.py</code></pre></div>
+<p>Enter your own decimal coordinates; west longitudes are negative. The original application uses Fahrenheit. Coordinates update weather retrieval, but the displayed city label and time zone require the source changes in Section 12.</p>
+<p>The sample on windows are 6:00–8:30 a.m. and 4:30–7:00 p.m. every day. The reference application uses <code>America/Denver</code>, including daylight saving time. Do not assume changing the Pi&#x27;s system time zone alone changes the application&#x27;s time zone.</p>
+<h2 id="8-transfer-and-install-the-application">8. Transfer and install the application</h2>
+<h3 id="on-the-mac">On the Mac</h3>
+<p>Open a new local terminal window. Replace the two uppercase placeholders:</p>
+<div class="code-wrap"><div class="code-head"><span>sh</span><button type="button" class="copy" data-copy="code-8">Copy</button></div><pre><code id="code-8">scp ~/Downloads/family-wall.zip PI_USER@PI_ADDRESS:~/</code></pre></div>
+<p>This copies your private installer to the Pi. If it is saved elsewhere, substitute its local path.</p>
+<h3 id="on-the-pi">On the Pi</h3>
+<p>Extract it to a new directory. For a later upgrade, use a different extraction directory so stale files cannot be left over from an older ZIP.</p>
+<div class="code-wrap"><div class="code-head"><span>sh</span><button type="button" class="copy" data-copy="code-9">Copy</button></div><pre><code id="code-9">python3 -m zipfile -e ~/family-wall.zip ~/family-wall-install
+bash ~/family-wall-install/family-wall/install.sh</code></pre></div>
+<p>Run the installer as your normal Pi user, not as root and not with <code>sudo bash</code>. It requests sudo only for operating system packages.</p>
+<p>When prompted:</p>
+<ol>
+<li>Enter the Pi login password if sudo requests it.</li>
+<li>Enter the exact shared-calendar name.</li>
+<li>Enter the Public Website URL for the dedicated Shared Album.</li>
+<li>Enter the weather latitude and longitude in decimal degrees.</li>
+<li>Enter the Apple Account email in the application setup prompt.</li>
+<li>Enter the Apple app-specific password in its hidden password prompt.</li>
+<li>Wait for calendar validation and installation to complete.</li>
+<li>Save the private phone access link printed by the installer.</li>
+</ol>
+<p>On an upgrade, pressing Enter at the credential prompts retains existing credentials. A fresh install requires both values.</p>
+<h3 id="what-the-installer-does">What the installer does</h3>
+<p>It installs Chromium, the necessary Debian Python libraries, and Wayland display tools. It validates calendar access, saves owner-only configuration, creates a timestamped application release, and sets up two user services:</p>
+<ul>
+<li><code>family-wall.service</code> serves the dashboard and refreshes calendar, photo, and weather data.</li>
+<li><code>family-wall-kiosk.service</code> starts Chromium full-screen against the local dashboard.</li>
+</ul>
+<p>Releases live under <code>~/.local/share/family-wall/releases/</code>; <code>~/.local/share/family-wall/current</code> points to the active release. The Pi runs prebuilt browser files, so Node.js and a frontend build are not needed on the Pi.</p>
+<p>The installer wakes the display for one hour to allow setup. That temporary override takes precedence over the schedule until it expires or you select Resume schedule.</p>
+<p>If credential validation fails during an upgrade, correct the problem and rerun installation. To return to the previously installed services in the meantime:</p>
+<div class="code-wrap"><div class="code-head"><span>sh</span><button type="button" class="copy" data-copy="code-10">Copy</button></div><pre><code id="code-10">systemctl --user start family-wall.service family-wall-kiosk.service</code></pre></div>
+<h2 id="9-enable-startup-and-verify-the-result">9. Enable startup and verify the result</h2>
+<p>The graphical desktop must log in automatically as the user who installed the dashboard. The installer enables the application services, but it does not configure desktop auto-login.</p>
+<p>If necessary, run this on the Pi and choose the desktop auto-login option for your display user:</p>
+<div class="code-wrap"><div class="code-head"><span>sh</span><button type="button" class="copy" data-copy="code-11">Copy</button></div><pre><code id="code-11">sudo raspi-config</code></pre></div>
+<p>Use the following acceptance checklist before calling the setup complete:</p>
+<ol>
+<li>Confirm the full-screen page is displaying on the HDMI monitor with the expected title and location.</li>
+<li>Check a real timed event, an all-day event, and a repeating event against Apple Calendar. A development preview may use sample events.</li>
+<li>Edit a calendar event and allow at least one five-minute refresh interval for the change to appear.</li>
+<li>Watch two or more photo changes. At the default setting, each image remains for 60 seconds; an album with six images takes about six minutes to loop, plus any transition time.</li>
+<li>Confirm weather location, Fahrenheit units, forecast dates, and update status.</li>
+<li>Open the private access link on a phone connected to the same home network. Confirm settings load and the calendar is visible.</li>
+<li>Note your preferred schedule, temporarily set short test windows, and select Resume schedule to remove the setup override. Confirm both sleep and wake, then restore your desired hours.</li>
+<li>Reboot and confirm recovery during an on window. Outside an on window, a sleeping monitor is expected; use the phone&#x27;s one-hour wake override if needed.</li>
+<li>Briefly disconnect internet access after content has loaded. Confirm cached content remains visible and the status indicates the refresh issue. Restore the connection and confirm recovery.</li>
+</ol>
+<p>To reboot:</p>
+<div class="code-wrap"><div class="code-head"><span>sh</span><button type="button" class="copy" data-copy="code-12">Copy</button></div><pre><code id="code-12">sudo reboot</code></pre></div>
+<p>Do not unplug the Pi each night to turn off the display. The schedule is designed to control the monitor while the Pi remains available.</p>
+<h2 id="10-daily-operation-and-expected-timing">10. Daily operation and expected timing</h2>
+<p>Edit calendar events using Apple Calendar and add or remove pictures in the dedicated Shared Album. The dashboard does not edit your calendar.</p>
+<p>The current refresh intervals are:</p>
+<ul>
+<li>Calendar: every 5 minutes.</li>
+<li>Photos from iCloud: every 15 minutes.</li>
+<li>Weather: every 15 minutes.</li>
+<li>Browser data refresh: every 15 seconds.</li>
+<li>Monitor schedule evaluation: approximately every 15 seconds.</li>
+<li>Photo rotation: 60 seconds by default, adjustable in Display settings.</li>
+</ul>
+<p>The photo connector keeps up to the newest 500 still images, makes oriented JPEG copies with a maximum dimension of 1920 pixels, and skips videos. Album removals take effect after a successful complete photo sync. A failed sync preserves the previous complete cache.</p>
+<p>Display settings supports two daily windows, photo duration, a one-hour wake override, and Resume schedule. These are the same windows every day; this version has no separate weekday/weekend schedule. The override clears when the service restarts.</p>
+<p>The star-and-nebula image drifts over 180 seconds in each direction. Reduced-motion preferences disable the animation. If performance is poor on the Pi, simplify or disable the background animation in the stylesheet and rebuild.</p>
+<p>Weather is model-based current conditions and forecast data, not a weather station attached to the house. See <a href="https://open-meteo.com/en/docs">Open-Meteo&#x27;s weather documentation</a>.</p>
+<p>Keep the phone access link private: possession grants access to the calendar and settings. It is intended for a trusted home network over local HTTP. Do not expose port 8080 to the internet or configure router port forwarding for it.</p>
+<h2 id="11-maintenance-and-troubleshooting">11. Maintenance and troubleshooting</h2>
+<h3 id="inspect-services">Inspect services</h3>
+<p>On the Pi:</p>
+<div class="code-wrap"><div class="code-head"><span>sh</span><button type="button" class="copy" data-copy="code-13">Copy</button></div><pre><code id="code-13">systemctl --user status family-wall.service family-wall-kiosk.service
+journalctl --user -u family-wall.service -n 40 --no-pager
+journalctl --user -u family-wall-kiosk.service -n 40 --no-pager</code></pre></div>
+<p>Check logs before reinstalling. Remove personal event details, access links, and identifiers before sharing diagnostic output. Do not publish <code>config.json</code> or its backup.</p>
+<h3 id="calendar-is-missing-or-credentials-stopped-working">Calendar is missing or credentials stopped working</h3>
+<p>Verify the exact calendar name, accepted sharing invitation, and account access. Revoke and replace the dedicated app-specific password if needed. On the Pi:</p>
+<div class="code-wrap"><div class="code-head"><span>sh</span><button type="button" class="copy" data-copy="code-14">Copy</button></div><pre><code id="code-14">systemctl --user stop family-wall.service
+python3 ~/.local/share/family-wall/current/server.py --setup
+systemctl --user start family-wall.service</code></pre></div>
+<p>The setup command also prints the private phone link again after successful validation. If the Pi&#x27;s address changed, use its current router address in the link while keeping the key private.</p>
+<h3 id="photos-do-not-update">Photos do not update</h3>
+<p>Check that Public Website is enabled and that the album link opens without signing in. Confirm the supported URL format. Allow a 15-minute refresh interval. Review photo errors in the service log. If Apple changes its public interface, the connector may need a source update; repeatedly reinstalling the same version will not fix an incompatible endpoint.</p>
+<h3 id="screen-remains-asleep">Screen remains asleep</h3>
+<p>Confirm the current time is inside an on window or use the one-hour wake override. Verify desktop auto-login, the Wayland socket, HDMI input, and <code>wlopm</code> control. Run the wake command from Section 5. Schedule changes can take about 15 seconds to apply.</p>
+<h3 id="screen-remains-on">Screen remains on</h3>
+<p>Select Resume schedule to cancel an active override. Check both configured windows, the application&#x27;s time zone, and service errors. A monitor that shows a “no signal” panel instead of sleeping needs a monitor-specific power test.</p>
+<h3 id="dashboard-does-not-return-after-reboot">Dashboard does not return after reboot</h3>
+<p>Check desktop auto-login first, then both user services. The kiosk waits for a graphical Wayland session and the local server. A terminal-only boot or desktop login screen will prevent normal kiosk startup.</p>
+<h3 id="weather-location-or-clock-is-wrong">Weather location or clock is wrong</h3>
+<p>Check coordinates in configuration. Check the frontend&#x27;s location text separately. Time zone is currently set in several source locations; follow Section 12 and rebuild. System clock synchronization must also be correct.</p>
+<h3 id="stop-the-display-application">Stop the display application</h3>
+<div class="code-wrap"><div class="code-head"><span>sh</span><button type="button" class="copy" data-copy="code-15">Copy</button></div><pre><code id="code-15">systemctl --user disable --now family-wall-kiosk.service family-wall.service
+XDG_RUNTIME_DIR=/run/user/$(id -u) WAYLAND_DISPLAY=wayland-0 wlopm --on &#x27;*&#x27;</code></pre></div>
+<p>This retains configuration, downloaded photos, and releases. If retiring or transferring the Pi, revoke the app-specific password and securely remove private configuration and cached content before handing over the device. A reboot restores the desktop&#x27;s normal session processes after the kiosk has disabled an idle-blanking process for that session.</p>
+<h2 id="12-adapt-rebuild-and-package-for-another-household">12. Adapt, rebuild, and package for another household</h2>
+<p>The current application has some household defaults embedded in source and compiled files. Copy the source into a separate working directory before preparing a reusable edition; keep the existing installed dashboard intact.</p>
+<p>Review these files:</p>
+<ul>
+<li><code>app/page.tsx</code>: visible household title, weather location label, time-zone constant, and any location-specific copy.</li>
+<li><code>app/layout.tsx</code>: browser-page title and metadata.</li>
+<li><code>app/globals.css</code>: layout, motion, and background styling.</li>
+<li><code>public/nebula-background.png</code>: local background artwork.</li>
+<li><code>pi/server.py</code>: default calendar name, album URL, coordinates, the <code>TZ</code> time zone, and the weather request&#x27;s <code>timezone</code> parameter.</li>
+<li><code>pi/kiosk.sh</code> and <code>pi/server.py</code>: Wayland display selection if the socket is not <code>wayland-0</code>.</li>
+<li><code>pi/README.md</code>, <code>pi/VALIDATION.md</code>, and design notes: remove household names, addresses, links, and personal installation examples before redistribution.</li>
+</ul>
+<p>Use a generic title such as “Family Wall.” Remove the embedded personal album URL from defaults and require each household to configure its own link before installation. Make weather coordinates and visible location labels agree. Use the same IANA time zone, such as <code>America/Denver</code>, in both frontend and backend, including the weather request and any visible time-zone labels.</p>
+<p>Changing <code>config.json</code> alone does not change a compiled page title, city label, or hardcoded time zone. Rebuild the frontend after editing those values.</p>
+<h3 id="build-on-the-development-computer">Build on the development computer</h3>
+<p>Use the saved source project&#x27;s dependency lockfile, Node.js 22.13 or newer, and pnpm. From the source project directory:</p>
+<div class="code-wrap"><div class="code-head"><span>sh</span><button type="button" class="copy" data-copy="code-16">Copy</button></div><pre><code id="code-16">pnpm install --frozen-lockfile
+pnpm exec tsc --noEmit
+pnpm build
+python3 scripts/package-pi.py</code></pre></div>
+<p>The package script collects <code>dist/client/</code> and the Pi runtime files. In this project it writes <code>Family-Wall-Space-Pi.zip</code> to the sibling <code>deliverables/</code> directory. Rename a copy to <code>family-wall.zip</code> if following Section 8 literally. Do not rename the folder inside the archive.</p>
+<p>For backend tests, use a separate Python environment with <code>caldav</code>, <code>requests</code>, <code>Pillow</code>, and <code>icalendar</code> installed, then run:</p>
+<div class="code-wrap"><div class="code-head"><span>sh</span><button type="button" class="copy" data-copy="code-17">Copy</button></div><pre><code id="code-17">python3 -m unittest discover -s tests
+bash -n pi/install.sh pi/kiosk.sh</code></pre></div>
+<p>The dashboard&#x27;s recorded validation included successful type checks, a production build, 13 backend tests, shell syntax checks, and archive checks. Broad lint was not fully clean. Those results do not replace real calendar, monitor, scheduling, and reboot checks on the Pi after any change.</p>
+<h3 id="review-a-shareable-package">Review a shareable package</h3>
+<p>Before redistribution, search source files, generated web files, documentation, and the ZIP&#x27;s extracted contents for personal names, emails, network addresses, public album tokens, and access keys. Rebuilding is essential because old values can survive in compiled JavaScript.</p>
+<p>Exclude configuration, credential backups, caches, downloaded family photos, browser profiles, and development logs. Retain the required third-party notices. Only share the neutral package after inspecting its actual contents.</p>
+<h2 id="13-how-the-components-fit-together">13. How the components fit together</h2>
+<p>The browser talks to a local Python service on port 8080. The service authenticates directly with Apple&#x27;s CalDAV endpoint for calendar events, reads the album&#x27;s public photo interface, and requests weather using coordinates. It caches results on the Pi and uses <code>wlopm</code> to control the monitor through the existing desktop session.</p>
+<p>Important paths on the Pi:</p>
+<ul>
+<li><code>~/.config/family-wall/config.json</code>: private credentials, access key, and settings.</li>
+<li><code>~/.config/family-wall/cache.json</code>: cached display data.</li>
+<li><code>~/.config/family-wall/photos/</code>: downloaded and resized photos.</li>
+<li><code>~/.config/family-wall/chromium/</code>: dedicated browser profile.</li>
+<li><code>~/.local/share/family-wall/releases/</code>: installed application versions.</li>
+<li><code>~/.local/share/family-wall/current</code>: link to the active version.</li>
+<li><code>~/.config/systemd/user/</code>: application service definitions.</li>
+</ul>
+<p>Apple credentials remain in the Pi&#x27;s backend configuration and are not sent to the dashboard browser. File permissions limit ordinary access to the Pi account; they are not encryption and do not protect against someone who controls that account or the device.</p>
+<h2 id="14-reusable-ai-build-prompt">14. Reusable AI build prompt</h2>
+<p>If recreating the project without the saved source, this prompt communicates the intended behavior. It is a specification, not a substitute for the application code or device testing.</p>
+<div class="code-wrap"><div class="code-head"><span>text</span><button type="button" class="copy" data-copy="code-18">Copy</button></div><pre><code id="code-18">Help me build a local family wall dashboard for a Raspberry Pi 3 Model B
+running Raspberry Pi OS desktop with labwc/Wayland and an HDMI monitor.
+
+Show one private shared iCloud calendar in a Sunday-to-Saturday weekly view,
+current weather and a five-day Fahrenheit forecast, and a dedicated public
+iCloud Shared Album with still photos rotating every 60 seconds.
+
+Use a black starfield with a slowly drifting pink, blue, purple, and subtle
+green nebula background. Keep animation lightweight and respect reduced motion.
+
+Support two screen-on windows every day, editable from a private local phone
+page. Include a one-hour wake override and a resume-schedule control. Keep the
+Pi powered on and use monitor sleep/wake rather than nightly shutdown.
+
+Ask for the household&#x27;s title, weather coordinates, time zone, and exact
+calendar name. Do not ask me to paste passwords into chat. Use a local hidden
+prompt for an Apple app-specific password and protect its configuration file.
+
+Cache content, show stale-data status, handle all-day and recurring events,
+and preserve working photos when a refresh fails. Keep access on the home LAN.
+Do not promise that an unofficial Apple photo endpoint is stable.
+
+Provide source code, a prebuilt Pi installer, repeatable setup instructions,
+tests, third-party notices, and an acceptance checklist. Separate preview data
+from verified real account data. Verify monitor wake, reboot startup, scheduling,
+and performance on the physical Pi before claiming those tests are complete.</code></pre></div>
+<h2 id="15-references-and-credits">15. References and credits</h2>
+<ul>
+<li><a href="https://www.raspberrypi.com/documentation/computers/getting-started.html">Raspberry Pi getting started</a>: operating system and hardware preparation.</li>
+<li><a href="https://www.raspberrypi.com/documentation/computers/remote-access.html">Raspberry Pi remote access</a>: SSH setup and discovery.</li>
+<li><a href="https://support.apple.com/en-us/102654">Apple app-specific passwords</a>: credential creation and revocation.</li>
+<li><a href="https://support.apple.com/guide/icloud/create-and-manage-shared-albums-mme985ae44d8/icloud">Apple Shared Albums</a>: public album sharing.</li>
+<li><a href="https://open-meteo.com/en/docs">Open-Meteo</a>: weather API; retain applicable attribution, including CC BY 4.0 attribution for the weather data used here.</li>
+<li><a href="https://labwc.github.io/integration.html">labwc integration</a>: monitor power control.</li>
+<li><a href="https://github.com/BZPJoe/icloud-shared-album-sync-repo">iCloud shared album connector reference</a>: MIT-licensed public CloudKit mapping adapted for this project; retain the application&#x27;s third-party notice.</li>
+</ul>
+<p>External interfaces and operating system menus can change. The local application details in this guide describe the version reviewed on the preparation date.</p><footer class="endnote">Family Wall · Reusable documentation · September 2026<br>This page contains its own styling and navigation. External reference links require internet access.</footer></article></main><script>
+const jump=document.getElementById('jump');jump.addEventListener('change',()=>{location.hash=jump.value});
+document.querySelectorAll('.copy').forEach(button=>button.addEventListener('click',async()=>{const text=document.getElementById(button.dataset.copy).textContent;try{if(navigator.clipboard&&window.isSecureContext){await navigator.clipboard.writeText(text)}else{const box=document.createElement('textarea');box.value=text;box.style.position='fixed';box.style.left='-9999px';document.body.append(box);box.select();if(!document.execCommand('copy'))throw Error('copy');box.remove()}button.textContent='Copied'}catch{button.textContent='Select text to copy'}setTimeout(()=>button.textContent='Copy',2500)}));
+document.getElementById('print').addEventListener('click',()=>window.print());
+const links=[...document.querySelectorAll('.toc a')];const heads=[...document.querySelectorAll('article h2')];
+function update(){let current=heads[0];for(const head of heads){if(head.getBoundingClientRect().top<=140)current=head}if(!current)return;for(const a of links){const active=a.hash==='#'+current.id;a.classList.toggle('active',active);if(active)a.setAttribute('aria-current','location');else a.removeAttribute('aria-current')}jump.value=current.id}
+window.addEventListener('scroll',update,{passive:true});update();
+</script></body></html>
