@@ -10,6 +10,7 @@ The project is designed to run locally on a Raspberry Pi connected to an HDMI mo
 ## Features
 
 - Monday-to-Sunday weekly calendar with timed, all-day, and recurring events
+- Compact event cards show time and title only; locations remain available in Apple Calendar
 - Private iCloud calendar access through CalDAV
 - Rotating still photos from a dedicated iCloud Shared Album
 - Photos shuffle when the dashboard opens; routine updates preserve the order
