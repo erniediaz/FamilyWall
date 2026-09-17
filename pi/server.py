@@ -7,6 +7,7 @@ import hmac
 import ipaddress
 import json
 import logging
+from logging.handlers import RotatingFileHandler
 import mimetypes
 import os
 import secrets
@@ -38,6 +39,31 @@ def atomic_json(path,data):
         json.dump(data,f)
     temporary.replace(path)
     path.chmod(0o600)
+
+
+class PrivateRotatingFileHandler(RotatingFileHandler):
+    def _open(self):
+        fd=os.open(self.baseFilename,os.O_WRONLY|os.O_CREAT|os.O_APPEND,0o600)
+        return os.fdopen(fd,'a',encoding='utf-8')
+
+
+def configure_display_log(folder):
+    folder=Path(folder)
+    folder.mkdir(parents=True,exist_ok=True,mode=0o700)
+    path=folder/'display.log'
+    fd=os.open(path,os.O_WRONLY|os.O_CREAT|os.O_APPEND,0o600)
+    os.close(fd)
+    path.chmod(0o600)
+    handler=PrivateRotatingFileHandler(path,maxBytes=256*1024,backupCount=3,encoding='utf-8')
+    handler.setFormatter(logging.Formatter('%(message)s'))
+    logger=logging.getLogger('family_wall.display')
+    logger.setLevel(logging.INFO)
+    logger.propagate=False
+    for old in list(logger.handlers):
+        logger.removeHandler(old)
+        old.close()
+    logger.addHandler(handler)
+    return logger
 
 
 def week_days(now):
@@ -146,6 +172,8 @@ class Wall:
                                   {'id':'demo3','title':'Weekend together','location':'','start':days[6],'end':(date.fromisoformat(days[6])+timedelta(days=1)).isoformat(),'allDay':True}]
             self.cache['status']['calendar']={'updated':time.time(),'error':None}
         self.last_display=None
+        self.last_power_record=None
+        self.last_power_heartbeat=0
 
     def snapshot(self):
         with self.lock:
@@ -179,27 +207,48 @@ class Wall:
             self.refresh(kind)
             time.sleep(interval)
 
+    def check_power(self):
+        now=datetime.now(TZ)
+        with self.lock:
+            override=time.time()<self.override_until
+            desired=override or in_schedule(now,self.config['windows'])
+        error=None
+        observed='unknown'
+        action='none'
+        failure='none'
+        if not self.demo:
+            try:
+                env=os.environ.copy()
+                env['XDG_RUNTIME_DIR']=f'/run/user/{os.getuid()}'
+                env['WAYLAND_DISPLAY']='wayland-0'
+                state=subprocess.run(['wlopm'],env=env,capture_output=True,text=True,timeout=8,check=True).stdout
+                lines=[line.strip().lower() for line in state.splitlines() if line.strip()]
+                if lines:
+                    observed='on' if all(line.endswith(' on') for line in lines) else 'off' if all(line.endswith(' off') for line in lines) else 'mixed-or-unknown'
+                correct=bool(lines) and all(line.endswith(' on' if desired else ' off') for line in lines)
+                if not correct:
+                    action='request-on' if desired else 'request-off'
+                    subprocess.run(['wlopm','--on' if desired else '--off','*'],env=env,capture_output=True,timeout=8,check=True)
+                    action+='-accepted'
+                self.last_display=desired
+            except Exception as exc:
+                error='Monitor control unavailable; retrying'
+                # Never record command output or arbitrary exception messages.
+                failure=type(exc).__name__
+        record=(desired,override,observed,action,failure)
+        tick=time.monotonic()
+        if record!=self.last_power_record or tick-self.last_power_heartbeat>=300:
+            logging.getLogger('family_wall.display').info(
+                '%s desired=%s source=%s observed-before=%s action=%s error=%s',
+                now.isoformat(timespec='seconds'),'on' if desired else 'off',
+                'override' if override else 'schedule',observed,action,failure)
+            self.last_power_record=record
+            self.last_power_heartbeat=tick
+        with self.lock:self.display={'on':desired,'override_until':self.override_until,'error':error}
+
     def power(self):
         while True:
-            with self.lock:
-                desired=time.time()<self.override_until or in_schedule(datetime.now(TZ),self.config['windows'])
-            error=None
-            if not self.demo:
-                try:
-                    env=os.environ.copy()
-                    env['XDG_RUNTIME_DIR']=f'/run/user/{os.getuid()}'
-                    env['WAYLAND_DISPLAY']='wayland-0'
-                    # Read actual power state so a monitor reconnect or desktop restart
-                    # cannot leave the display on until the next schedule boundary.
-                    state=subprocess.run(['wlopm'],env=env,capture_output=True,text=True,timeout=8,check=True).stdout
-                    lines=[line.strip().lower() for line in state.splitlines() if line.strip()]
-                    correct=bool(lines) and all(line.endswith(' on' if desired else ' off') for line in lines)
-                    if not correct:
-                        subprocess.run(['wlopm','--on' if desired else '--off','*'],env=env,capture_output=True,timeout=8,check=True)
-                    self.last_display=desired
-                except Exception:
-                    error='Monitor control unavailable; retrying'
-            with self.lock:self.display={'on':desired,'override_until':self.override_until,'error':error}
+            self.check_power()
             time.sleep(15)
 
     def start(self):
@@ -354,6 +403,9 @@ def main():
     parser.add_argument('--port',type=int,default=8080)
     args=parser.parse_args()
     if args.setup:setup(args.data);return
+    display_logger=configure_display_log(args.data)
+    display_logger.info('%s service-start timezone=%s demo=%s',
+                        datetime.now(TZ).isoformat(timespec='seconds'),TZ,args.demo)
     wall=Wall(args.data,args.web,args.demo)
     wall.start()
     server=ThreadingHTTPServer(('127.0.0.1' if args.demo else '0.0.0.0',args.port),Handler)

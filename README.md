@@ -250,6 +250,23 @@ Review recent backend messages:
 journalctl --user -u family-wall.service -n 50 --no-pager
 ```
 
+Monitor diagnostics survive service restarts and reboots in
+`~/.config/family-wall/display.log`. Read recent records with:
+
+```sh
+tail -n 60 ~/.config/family-wall/display.log
+```
+
+Records include a local timestamp with UTC offset, the requested on/off state,
+schedule versus override, the state reported by the desktop before any command,
+and the command outcome or error type. State changes are logged immediately;
+unchanged state is recorded every five minutes. A command being accepted does
+not prove the physical monitor woke; the next record reports what the desktop sees.
+Files rotate at 256 KiB with three backups (`display.log.1` through `.3`).
+They are owner-readable and contain no calendar contents, album links, credentials,
+or raw command output. These logs diagnose future failures; they cannot recover
+records from earlier boots before this update was installed.
+
 Re-enter or replace Apple credentials:
 
 ```sh
