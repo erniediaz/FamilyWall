@@ -10,7 +10,7 @@ A Raspberry Pi drives a monitor over HDMI. Chromium displays a local dashboard i
 
 The design includes:
 
-- A Sunday–Saturday weekly calendar with timed and all-day events.
+- A Monday–Sunday weekly calendar with timed and all-day events.
 - One shared iCloud calendar, read using CalDAV, Apple's calendar access protocol.
 - A dedicated iCloud Shared Album, with a photo changing every 60 seconds by default.
 - Current weather and a five-day forecast in Fahrenheit from Open-Meteo.
@@ -459,7 +459,7 @@ If recreating the project without the saved source, this prompt communicates the
 Help me build a local family wall dashboard for a Raspberry Pi 3 Model B
 running Raspberry Pi OS desktop with labwc/Wayland and an HDMI monitor.
 
-Show one private shared iCloud calendar in a Sunday-to-Saturday weekly view,
+Show one private shared iCloud calendar in a Monday-to-Sunday weekly view,
 current weather and a five-day Fahrenheit forecast, and a dedicated public
 iCloud Shared Album with still photos rotating every 60 seconds.
 

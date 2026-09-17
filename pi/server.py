@@ -41,7 +41,7 @@ def atomic_json(path,data):
 
 
 def week_days(now):
-    start=now.date()-timedelta(days=(now.weekday()+1)%7)
+    start=now.date()-timedelta(days=now.weekday())
     return [(start+timedelta(days=i)).isoformat() for i in range(7)]
 
 

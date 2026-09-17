@@ -9,7 +9,7 @@ The project is designed to run locally on a Raspberry Pi connected to an HDMI mo
 
 ## Features
 
-- Sunday-to-Saturday weekly calendar with timed, all-day, and recurring events
+- Monday-to-Sunday weekly calendar with timed, all-day, and recurring events
 - Private iCloud calendar access through CalDAV
 - Rotating still photos from a dedicated iCloud Shared Album
 - Current conditions and a five-day Fahrenheit forecast from Open-Meteo

@@ -9,7 +9,7 @@
 <p>A Raspberry Pi drives a monitor over HDMI. Chromium displays a local dashboard in full-screen kiosk mode. A Python service retrieves calendar events, photos, and weather, and controls when the monitor sleeps.</p>
 <p>The design includes:</p>
 <ul>
-<li>A Sunday–Saturday weekly calendar with timed and all-day events.</li>
+<li>A Monday–Sunday weekly calendar with timed and all-day events.</li>
 <li>One shared iCloud calendar, read using CalDAV, Apple&#x27;s calendar access protocol.</li>
 <li>A dedicated iCloud Shared Album, with a photo changing every 60 seconds by default.</li>
 <li>Current weather and a five-day forecast in Fahrenheit from Open-Meteo.</li>
@@ -300,7 +300,7 @@ bash -n pi/install.sh pi/kiosk.sh</code></pre></div>
 <div class="code-wrap"><div class="code-head"><span>text</span><button type="button" class="copy" data-copy="code-18">Copy</button></div><pre><code id="code-18">Help me build a local family wall dashboard for a Raspberry Pi 3 Model B
 running Raspberry Pi OS desktop with labwc/Wayland and an HDMI monitor.
 
-Show one private shared iCloud calendar in a Sunday-to-Saturday weekly view,
+Show one private shared iCloud calendar in a Monday-to-Sunday weekly view,
 current weather and a five-day Fahrenheit forecast, and a dedicated public
 iCloud Shared Album with still photos rotating every 60 seconds.
 

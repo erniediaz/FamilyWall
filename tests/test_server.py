@@ -23,8 +23,16 @@ class Scheduling(unittest.TestCase):
         for h,want in [(23,True),(1,True),(3,False)]:
             self.assertEqual(in_schedule(datetime(2026,9,16,h,tzinfo=TZ),[['22:00','02:00']]),want)
     def test_week_rollover(self):
-        self.assertEqual(week_days(datetime(2026,9,19,tzinfo=TZ))[0],'2026-09-13')
-        self.assertEqual(week_days(datetime(2026,9,20,tzinfo=TZ))[0],'2026-09-20')
+        expected=['2026-09-14','2026-09-15','2026-09-16','2026-09-17',
+                  '2026-09-18','2026-09-19','2026-09-20']
+        for day in range(14,21):
+            with self.subTest(day=day):
+                self.assertEqual(week_days(datetime(2026,9,day,tzinfo=TZ)),expected)
+        self.assertEqual(week_days(datetime(2026,9,21,tzinfo=TZ))[0],'2026-09-21')
+    def test_week_spans_new_year(self):
+        self.assertEqual(week_days(datetime(2027,1,1,tzinfo=TZ)),
+                         ['2026-12-28','2026-12-29','2026-12-30','2026-12-31',
+                          '2027-01-01','2027-01-02','2027-01-03'])
     def test_reject_invalid_settings(self):
         for w in [[['25:00','08:00'],['16:00','19:00']],[['06:00','06:00'],['16:00','19:00']]]:
             with self.assertRaises(ValueError):validate_settings({'windows':w,'photo_seconds':60})
