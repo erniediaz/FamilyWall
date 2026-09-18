@@ -1,5 +1,18 @@
 MIT License
 
+Daily Highlights data sources (not covered by the software license below):
+- Wikipedia contributors: On This Day text, CC BY-SA 4.0,
+  https://creativecommons.org/licenses/by-sa/4.0/ . Displayed text is selected
+  and whitespace-normalized; source pages are linked on each card.
+- Checkiday: observance names and source links; https://www.checkiday.com/ .
+- ESPN: final-score facts and game links; https://www.espn.com/ .
+  Neither ESPN nor Checkiday sponsors this software.
+- Quotes are short excerpts from original works in the US public domain.
+  Author, work, and Project Gutenberg source URL accompany each excerpt in
+  quotes.json. Fictional speakers are identified in the work label.
+
+The following license applies to the existing attributed code component:
+
 Copyright (c) 2026 BZPJoe
 
 Permission is hereby granted, free of charge, to any person obtaining a copy

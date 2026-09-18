@@ -15,7 +15,7 @@ systemctl --user stop family-wall.service family-wall-kiosk.service 2>/dev/null 
 python3 server.py --setup
 release="$HOME/.local/share/family-wall/releases/$(date +%Y%m%d-%H%M%S)"
 mkdir -p "$release" "$HOME/.config/systemd/user"
-cp server.py photos.py kiosk.sh THIRD-PARTY-NOTICES "$release/"
+cp server.py photos.py highlights.py quotes.json release.py kiosk.sh THIRD-PARTY-NOTICES "$release/"
 cp -R web "$release/web"
 chmod 700 "$release/kiosk.sh"
 python3 - "$release" <<'PY'

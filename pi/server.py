@@ -23,6 +23,7 @@ from zoneinfo import ZoneInfo
 
 import requests
 from photos import sync_photos
+from highlights import Highlights, quotes
 
 TZ=ZoneInfo('America/Denver')
 DEFAULTS={'calendar_name':'Family','album_url':'',
@@ -174,6 +175,11 @@ class Wall:
         self.last_display=None
         self.last_power_record=None
         self.last_power_heartbeat=0
+        self.highlights=Highlights(self.folder/'highlights.json',atomic_json)
+        self.highlights_view=self.highlights.snapshot(datetime.now(TZ))
+        if not any(row['category']=='quotes' for row in self.highlights_view['items']):
+            self.highlights_view['items'].extend(quotes(datetime.now(TZ).date().isoformat()))
+            self.highlights_view['unavailable']=[kind for kind in self.highlights_view['unavailable'] if kind!='quotes']
 
     def snapshot(self):
         with self.lock:
@@ -183,7 +189,26 @@ class Wall:
                          settings={k:self.config[k] for k in ('windows','photo_seconds')},
                          display=self.display.copy(),demo=self.demo)
             value['photos']=['/photos/'+name for name in value['photos']]
+            if self.demo:
+                value['status']['calendar']={'updated':time.time(),'error':None}
+                if not self.config.get('album_url') and value['photos']:
+                    value['status']['photos']={'updated':time.time(),'error':None}
+            value['highlights']=copy.deepcopy(self.highlights_view)
+            if value['highlights']['day']!=now.date().isoformat():
+                value['highlights']={'day':now.date().isoformat(),'items':quotes(now.date().isoformat()),'unavailable':['history','observances','sports']}
+            value['version']='2.0-highlights'
+            value['display_title']=self.config.get('display_title','FAMILY WALL')
             return value
+
+    def highlights_worker(self):
+        def publish(value):
+            with self.lock:self.highlights_view=value
+        while True:
+            try:
+                self.highlights.refresh(datetime.now(TZ),publish)
+            except Exception as exc:
+                logging.warning('Highlights update failed (%s)',type(exc).__name__)
+            time.sleep(60)
 
     def refresh(self,kind):
         try:
@@ -192,7 +217,9 @@ class Wall:
                 if self.demo:return
                 value=calendar_events(config,datetime.now(TZ));key='events'
             elif kind=='weather':value=get_weather(config);key='weather'
-            else:value=sync_photos(config['album_url'],self.folder/'photos');key='photos'
+            else:
+                if self.demo and not config.get('album_url'):return
+                value=sync_photos(config['album_url'],self.folder/'photos');key='photos'
             with self.lock:
                 self.cache[key]=value
                 self.cache['status'][kind]={'updated':time.time(),'error':None}
@@ -255,6 +282,7 @@ class Wall:
         for kind,interval in [('calendar',300),('weather',900),('photos',900)]:
             threading.Thread(target=self.worker,args=(kind,interval),daemon=True).start()
         threading.Thread(target=self.power,daemon=True).start()
+        threading.Thread(target=self.highlights_worker,daemon=True).start()
 
 
 class Handler(BaseHTTPRequestHandler):

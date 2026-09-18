@@ -5,10 +5,11 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { photoOrder } from '@/lib/photo-order';
 import { eventTimeRange } from '@/lib/event-time';
+import { DailyHighlights, HighlightsData } from '@/components/daily-highlights';
 
 type Event = {id:string; title:string; start:string; end:string; allDay:boolean; location:string};
 type SettingsData = {windows:string[][]; photo_seconds:number};
-type Data = {today:string; week:string[]; events:Event[]; photos:string[]; weather:any; status:Record<string,{updated:number; error:string|null}>; settings:SettingsData; display:{on:boolean; override_until:number; error:string|null}; demo?:boolean};
+type Data = {today:string; week:string[]; events:Event[]; photos:string[]; weather:any; status:Record<string,{updated:number; error:string|null}>; settings:SettingsData; display:{on:boolean; override_until:number; error:string|null}; demo?:boolean; highlights?:HighlightsData; display_title?:string};
 const tz='America/Denver';
 const dayDate=(s:string)=>new Date(s+'T12:00:00');
 const localDay=(d:Date)=>new Intl.DateTimeFormat('en-CA',{timeZone:tz,year:'numeric',month:'2-digit',day:'2-digit'}).format(d);
@@ -27,7 +28,7 @@ export default function Home(){
  const activePhoto=data?.photos.length?data.photos[photo%data.photos.length]:null;
  const statuses=data?Object.entries(data.status).filter(([name,s])=>s.error||!s.updated||Date.now()/1000-s.updated>({calendar:900,weather:3600,photos:3600} as Record<string,number>)[name]):[];
  return <main className="wall">
-  <header className="top"><div className="brand"><div className="eyebrow">FAMILY WALL</div><h1>{now?now.toLocaleDateString('en-US',{timeZone:tz,weekday:'long',month:'long',day:'numeric'}):'Welcome home'}</h1></div><div className="current-weather"><WeatherIcon code={current?.weather_code}/><div><strong>{current?Math.round(current.temperature_2m)+'°':'—'}</strong><span>Local · °F</span></div><p>{current?condition(current.weather_code):'Weather connecting'}</p></div><div className="clock">{now?now.toLocaleTimeString('en-US',{timeZone:tz,hour:'numeric',minute:'2-digit'}):'—'}<small>Mountain time</small></div></header>
+  <header className="top"><div className="brand"><div className="eyebrow">{data?.display_title || 'FAMILY WALL'}</div><h1>{now?now.toLocaleDateString('en-US',{timeZone:tz,weekday:'long',month:'long',day:'numeric'}):'Welcome home'}</h1></div><DailyHighlights data={data?.highlights} today={today}/><div className="current-weather"><WeatherIcon code={current?.weather_code}/><div><strong>{current?Math.round(current.temperature_2m)+'°':'—'}</strong><span>Local · °F</span></div><p>{current?condition(current.weather_code):'Weather connecting'}</p></div><div className="clock">{now?now.toLocaleTimeString('en-US',{timeZone:tz,hour:'numeric',minute:'2-digit'}):'—'}<small>Mountain time</small></div></header>
   {data?.demo&&<div className="demo-banner">LAYOUT PREVIEW · Sample calendar events. Connect your Pi to show your Family calendar.</div>}
   <div className="main-grid"><section className="calendar"><div className="section-heading"><h2><CalendarDays/> Our week</h2><span>{data?.week.length?dayDate(data.week[0]).toLocaleDateString('en-US',{month:'short',day:'numeric'})+' – '+dayDate(data.week[6]).toLocaleDateString('en-US',{month:'short',day:'numeric'}):'Family calendar'}</span></div>
   <div className="week">{data?.week.map(day=>{const events=data.events.filter(e=>includesDay(e,day));return <article className={'day '+(day===today?'today':'')} key={day}><div className="day-heading"><span>{dayDate(day).toLocaleDateString('en-US',{weekday:'short'})}</span><strong>{dayDate(day).getDate()}</strong>{day===today&&<em>TODAY</em>}</div><div className="events">{events.length?events.map(e=><div className={'event '+(e.allDay?'all-day':'')} key={e.id}><span>{e.allDay?'ALL DAY':eventTimeRange(e.start,e.end,tz)}</span><h3>{e.title}</h3></div>):<p className="empty-day">{data.status.calendar.updated?'Nothing planned': 'Waiting for calendar'}</p>}</div></article>})}{!data&&<div className="connecting"><CalendarDays/><h2>Connecting to Family</h2><p>{offline?'The dashboard service is unavailable. Retrying automatically.':'Getting your week ready…'}</p></div>}</div></section>

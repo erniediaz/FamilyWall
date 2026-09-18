@@ -1,5 +1,7 @@
 # Build a Family Wall with Raspberry Pi and iCloud
 
+**Highlights version:** Read [HIGHLIGHTS.md](HIGHLIGHTS.md) first for the new header, separate installer, existing-Pi upgrade, and rollback instructions. The original setup instructions below remain useful for a fresh installation.
+
 A repeatable setup guide for a weekly calendar, rotating family photos, local weather, and a scheduled display.
 
 Prepared September 16, 2026. Account names, network addresses, album links, credentials, and family photos have been removed. Commands use placeholders where you must supply your own information.

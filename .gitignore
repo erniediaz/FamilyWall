@@ -44,5 +44,6 @@ __pycache__/
 config.json
 config.before-edit.json
 cache.json
+highlights.json
 photos/
 chromium/

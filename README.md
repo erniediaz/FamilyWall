@@ -1,5 +1,11 @@
 # Family Wall
 
+## Optional version 2: Daily Highlights
+
+This branch adds shuffled History, Fun Observances, Quotes, and final Sports scores to the header every 15 seconds. Daily non-sports categories are capped at 10 items each. Sports include NFL, MLB, Avalanche, Nuggets, and college Top 25/Florida football, men’s and women’s basketball, and baseball.
+
+**[Preview, installation, sources, and one-command rollback](pi/HIGHLIGHTS.md)**. This version uses a separate **Family-Wall-Highlights-Pi.zip**; the original dashboard remains on `main`. Existing installations should use `release.py install`, not replace only their web files.
+
 A full-screen family dashboard for Raspberry Pi that combines a weekly iCloud calendar, an iCloud Shared Album, local weather, and automatic monitor scheduling.
 
 The project is designed to run locally on a Raspberry Pi connected to an HDMI monitor. Chromium provides the display, while a small Python service retrieves and caches the household data.
