@@ -4,6 +4,8 @@ This optional version adds a rotating header card. The original dashboard remain
 
 ## What changes
 
+- Desktop weather/footer spacing is tighter, giving the calendar and photos 42 additional vertical pixels at 1920×1080. Weather font sizes are unchanged; the bottom margin remains 8 pixels.
+
 - A card between the date and weather changes every **15 seconds**, with a gentle fade and a pause/resume button.
 - History, Fun Observances, Quotes, and Final Scores take turns in a shuffled order. Items within each category also shuffle; a long sports list does not crowd out the other categories.
 - **One-minute policy:** when all four categories are available, every four-card cycle contains exactly one history item, one observance, one quote, and one final score, each displayed for 15 seconds. More sports results extend the number of cycles, never the share of screen time. Unavailable categories are skipped rather than filled with stale or invented information.

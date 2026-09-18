@@ -54,6 +54,17 @@ body{background:#000}
 }
 
 /* Daily highlights v2: a quiet, fixed-height header card. */
+/* Give the calendar more height by tightening only the desktop weather/footer spacing. */
+@media(min-width:761px){
+ .wall{padding-bottom:8px}
+ .forecast{margin-top:-8px;padding-top:14px}
+ .forecast-day{row-gap:5px}
+ .forecast-label h2{margin:4px 0}
+ footer{margin-top:-8px}
+}
+@media(min-width:761px) and (max-height:800px){
+ .forecast{padding-top:8px}
+}
 .top{gap:26px}
 .brand{flex:0 1 470px;min-width:0}
 .brand h1{font-size:clamp(26px,2vw,38px)}
