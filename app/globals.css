@@ -9,7 +9,7 @@
 :root,.dark{--background:#000;--secondary:#10101d;--border:#303043;--foreground:#f5f4ff;--primary:#a8def6}
 body{background:#000}
 .wall{position:relative;isolation:isolate;background:transparent}
-.wall::before{content:"";position:fixed;inset:-5%;z-index:-2;pointer-events:none;background:#000 url('/nebula-background.png') center/cover no-repeat;opacity:.8;transform:translate3d(-1%,0,0) scale(1.02);animation:nebula-drift 180s ease-in-out infinite alternate;will-change:transform}
+.wall::before{content:"";position:fixed;inset:-5%;z-index:-2;pointer-events:none;background:#000 url('/nebula-background.png') center/cover no-repeat;opacity:.8;transform:translate3d(-3%,-2%,0) scale(1.05);animation:nebula-drift 75s ease-in-out infinite alternate;will-change:transform}
 .wall::after{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:linear-gradient(180deg,rgba(0,0,0,.32),rgba(0,0,0,.08) 45%,rgba(0,0,0,.34))}
 .day{background:rgba(3,5,14,.78);border-color:rgba(168,160,220,.23)}
 .day.today{background:rgba(18,20,42,.83);border-color:#95cce9}
@@ -21,7 +21,7 @@ body{background:#000}
 .top,.forecast,.clock,.forecast-day{border-color:rgba(171,157,215,.25)}
 .settings-panel{background:#11111f;border-color:#666086}
 .connecting{background:rgba(7,8,19,.88)}
-@keyframes nebula-drift{0%{transform:translate3d(-1%,-.6%,0) scale(1.02)}50%{transform:translate3d(.6%,.8%,0) scale(1.055)}100%{transform:translate3d(1%,-.3%,0) scale(1.025)}}
+@keyframes nebula-drift{0%{transform:translate3d(-3%,-2%,0) scale(1.05)}50%{transform:translate3d(1.5%,2.5%,0) scale(1.12)}100%{transform:translate3d(3%,-1.5%,0) scale(1.07)}}
 @media(prefers-reduced-motion:reduce){.wall::before{animation:none;transform:none;will-change:auto}}
 
 /* Clip the oversized animated backdrop without creating page scrollbars. */

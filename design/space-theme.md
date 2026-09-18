@@ -5,7 +5,7 @@ Photo timing remains 60 seconds per photo (default). Six photos complete one rot
 Background asset: public/nebula-background.png, 1672 by 941 pixels.
 Created using built-in image_gen.imagegen. The image is an illustration, not an astronomical observation.
 
-Animation: a single background image translated and scaled gently over 180 seconds in each direction.
+Animation: a single background image translated and scaled gently over 75 seconds in each direction.
 No animated blur or video. Reduced-motion preference disables the movement. Raspberry Pi performance
 has not yet been measured. Calendar surfaces are translucent near-black for contrast.
 

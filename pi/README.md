@@ -328,7 +328,7 @@ The photo connector keeps up to the newest 500 still images, makes oriented JPEG
 
 Display settings supports two daily windows, photo duration, a one-hour wake override, and Resume schedule. These are the same windows every day; this version has no separate weekday/weekend schedule. The override clears when the service restarts.
 
-The star-and-nebula image drifts over 180 seconds in each direction. Reduced-motion preferences disable the animation. If performance is poor on the Pi, simplify or disable the background animation in the stylesheet and rebuild.
+The star-and-nebula image drifts over 75 seconds in each direction. Reduced-motion preferences disable the animation. If performance is poor on the Pi, simplify or disable the background animation in the stylesheet and rebuild.
 
 Weather is model-based current conditions and forecast data, not a weather station attached to the house. See [Open-Meteo's weather documentation](https://open-meteo.com/en/docs).
 
