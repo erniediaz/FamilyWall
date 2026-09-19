@@ -88,3 +88,13 @@ Tests: `python3 -m unittest discover -s tests -p 'test_*.py'` with the Pi depend
 ## Deployment boundary
 
 Mac tests and a local browser preview do not establish Pi hardware performance or physical monitor wake behavior. After installation, verify the header, photos, and the next scheduled sleep/wake on the actual Pi. The monitor-control code itself is unchanged in this version.
+
+## Desktop window size safeguard
+
+The launcher now uses `--class=family-wall` and adds a matching labwc `Maximize` window rule before launching Chromium. Kiosk mode still supplies fullscreen. The desktop rule supplies a maximized fallback on initial window mapping; it is not a continuous fullscreen watchdog and does not restart the browser on scheduled wake.
+
+Existing user desktop settings are preserved and backed up to `~/.config/labwc/rc.xml.before-family-wall` before the first edit. Invalid XML is left untouched and logged; kiosk startup continues. The Pi uses labwc's merged configuration (`labwc -m`), so a new minimal user file retains system defaults. Custom labwc configuration paths require manual integration.
+
+The rule remains after release rollback but only matches the new `family-wall` browser class. Older launchers do not use that class. To remove the safeguard from a current release, remove its `windowRule identifier="family-wall"` element and the launcher rule-install block/class argument.
+
+Reference: https://labwc.github.io/labwc-config.5.html and https://labwc.github.io/labwc-actions.5.html . Physical Pi startup and sleep/wake behavior must be checked after installation.
