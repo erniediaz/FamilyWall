@@ -1,5 +1,15 @@
 # Validation — Highlights version, 2026-09-18
 
+## Seven-team sports revision
+
+- 35 Python tests and 10 JavaScript tests pass. New checks cover the exact seven-team list, Florida baseball’s distinct ESPN ID, regular/postseason filtering, season start/end and grace period, bye weeks, completed-only last scores, future-only next games, canceled/postponed exclusions, unknown times/flex dates, fresh AP polls, team identity mismatches, old-cache migration, and balanced sports slots.
+- Live team integration returned active cards for Florida football, Colorado Rockies, and Denver Broncos. Florida men’s basketball/baseball, Denver Nuggets, and Colorado Avalanche were hidden by their current schedules.
+- TypeScript and production export passed. New `team_sports.py` is included in both fresh installs and upgrades.
+- The full team card was inspected at 1920×1080 and 1280×720. Its content remained inside the header, there was no outer page overflow, and the 1080p calendar retained its 571.5-pixel preview height after the previous spacing improvement. Rotation was resumed after inspection.
+- Season visibility is a schedule-based approximation with a seven-day final-result grace period. Provider endpoints are undocumented; unavailable rankings/standings are labeled rather than guessed. These checks do not establish physical Pi performance or display behavior.
+
+The following sections are historical validation of earlier highlights releases.
+
 ## Highlights checks
 
 - 30 Python tests passed, including final-only status filtering, all selected league/team/rank filters, age cutoff, duplicate removal, source failures, daily selection limits, daily rollover, cache permissions, upgrade/rollback, and automatic restoration after a failed startup check. Release tests simulate service control; they do not run systemd on a Pi.

@@ -5,7 +5,7 @@ import { Highlight, highlightOrder, HIGHLIGHT_INTERVAL } from '@/lib/highlight-o
 
 export type HighlightsData = {day: string; items: Highlight[]; unavailable: string[]};
 const EMPTY: Highlight[] = [];
-const labels = {history: 'On this day', observances: 'Fun observances', quotes: 'A little perspective', sports: 'Final scores'};
+const labels = {history: 'On this day', observances: 'Fun observances', quotes: 'A little perspective', sports: 'Your teams'};
 const icons = {history: BookOpen, observances: Sparkles, quotes: Quote, sports: Trophy};
 
 export function DailyHighlights({data, today}: {data?: HighlightsData; today: string}) {
@@ -50,8 +50,13 @@ export function DailyHighlights({data, today}: {data?: HighlightsData; today: st
       <button type="button" onClick={() => setPaused(value => !value)} aria-label={paused ? 'Resume highlights' : 'Pause highlights'} title={paused ? 'Resume highlights' : 'Pause highlights'}>{paused ? <Play/> : <Pause/>}</button>
     </div>
     <div key={row?.id || 'waiting'} className="highlight-card">
-      <p className="highlight-text">{row?.text || 'A little history, a little inspiration, and the final score.'}</p>
-      <div className="highlight-detail"><span title={row?.detail}>{row?.detail || 'Gathering today’s highlights…'}{row?.cached ? ' · saved result' : ''}</span>
+      {row?.team ? <div className="team-snapshot">
+        <h3>{row.team.name}</h3>
+        <p className="team-record">Record {row.team.record} <span>· {row.team.standing}</span></p>
+        <p title={row.team.last_title}><b>Last</b> {row.team.last}</p>
+        <p title={row.team.next_title}><b>Next</b> {row.team.next}</p>
+      </div> : <p className="highlight-text">{row?.text || 'A little history, a little inspiration, and your favorite teams.'}</p>}
+      <div className="highlight-detail"><span title={row?.detail}>{row?.team ? 'Game times · Mountain' : row?.detail || 'Gathering today’s highlights…'}{row?.cached ? ' · saved data' : ''}</span>
         {row && <a href={row.url} target="_blank" rel="noreferrer" title={row.source}>{row.source}</a>}
       </div>
     </div>

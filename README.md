@@ -2,7 +2,7 @@
 
 ## Optional version 2: Daily Highlights
 
-This branch adds shuffled History, Fun Observances, Quotes, and final Sports scores to the header every 15 seconds. Daily non-sports categories are capped at 10 items each. Sports include NFL, MLB, Avalanche, Nuggets, and college Top 25/Florida football, men’s and women’s basketball, and baseball.
+This branch adds shuffled History, Fun Observances, Quotes, and Sports team cards to the header every 15 seconds. Daily non-sports categories are capped at 10 items each. The sports slot cycles only Florida Gators football, men’s basketball, and baseball, plus the Rockies, Broncos, Nuggets, and Avalanche while in season. Each card shows the record, ranking/standing, last final result, and next scheduled game.
 
 **[Preview, installation, sources, and one-command rollback](pi/HIGHLIGHTS.md)**. This version uses a separate **Family-Wall-Highlights-Pi.zip**; the original dashboard remains on `main`. Existing installations should use `release.py install`, not replace only their web files.
 

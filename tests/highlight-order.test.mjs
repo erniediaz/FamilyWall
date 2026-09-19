@@ -15,6 +15,15 @@ test('empty, single category, and duplicate items are safe', () => {
   assert.deepEqual(highlightOrder([]), []);
   assert.deepEqual(highlightOrder([item('h', 'history'), item('h', 'history')]), ['h']);
 });
+test('three active teams cycle through one sports slot per four-card round', () => {
+  const rows = ['history', 'observances', 'quotes'].flatMap(category => Array.from({length:10}, (_,i) => item(category+i, category)));
+  rows.push(...['broncos','rockies','gators'].map(id => item(id, 'sports')));
+  const order = highlightOrder(rows, () => .5);
+  const sports = order.filter(id => ['broncos','rockies','gators'].includes(id));
+  assert.equal(order.length, 40);
+  assert.equal(sports.length, 10);
+  for (let i=0; i<9; i+=3) assert.equal(new Set(sports.slice(i,i+3)).size,3);
+});
 test('all unique items appear and inputs remain intact', () => {
   const rows = Array.from({length: 10}, (_, i) => item('q' + i, 'quotes'));
   const original = structuredClone(rows);

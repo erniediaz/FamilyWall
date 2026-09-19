@@ -7,22 +7,23 @@ This optional version adds a rotating header card. The original dashboard remain
 - Desktop weather/footer spacing is tighter, giving the calendar and photos 42 additional vertical pixels at 1920×1080. Weather font sizes are unchanged; the bottom margin remains 8 pixels.
 
 - A card between the date and weather changes every **15 seconds**, with a gentle fade and a pause/resume button.
-- History, Fun Observances, Quotes, and Final Scores take turns in a shuffled order. Items within each category also shuffle; a long sports list does not crowd out the other categories.
-- **One-minute policy:** when all four categories are available, every four-card cycle contains exactly one history item, one observance, one quote, and one final score, each displayed for 15 seconds. More sports results extend the number of cycles, never the share of screen time. Unavailable categories are skipped rather than filled with stale or invented information.
+- History, Fun Observances, Quotes, and Sports team cards take turns in a shuffled order. Items within each category also shuffle.
+- **One-minute policy:** when all four categories are available, every four-card cycle contains exactly one history item, one observance, one quote, and one team card, each displayed for 15 seconds. Active teams cycle through successive sports slots. Unavailable categories are skipped rather than filled with stale or invented information.
 - History, observances, and quotes each have **at most 10 distinct items per Mountain-time calendar day**. They repeat during that day. There may be fewer if the source has fewer suitable entries or is unavailable.
 - A daily sample of 10 quotes comes from 20 checked public-domain excerpts. Each includes its author and source book. It does not require an AI subscription or a quote-service account.
-- NFL and MLB: all completed games, including Broncos and Rockies results without duplicates.
-- NHL: Colorado Avalanche. NBA: Denver Nuggets.
-- College football, men’s basketball, women’s basketball, and baseball: games involving an ESPN-designated Top 25 team, plus Florida Gators games regardless of ranking. Rank labels come from ESPN’s game data; polls may differ between sports.
-- Sports results cover today and the previous seven calendar days. Dates and final status are displayed. Scheduled, live, postponed, and canceled games are excluded. No games during the off-season means no cards for that sport.
-- Current and previous-day scoreboards refresh approximately every 30 minutes. Older scoreboards refresh daily for corrections. This is a results display, not a live ticker.
+- Only seven teams: Florida Gators Football, Florida Gators Men’s Basketball, Florida Gators Baseball, Colorado Rockies, Denver Broncos, Denver Nuggets, and Colorado Avalanche. League-wide scores, other Top 25 teams, and women’s basketball are no longer included.
+- Each team card shows its name, reported overall record, ranking and/or division/conference standing, last completed game (W/L/T and team score first), and next scheduled game with Mountain time. Opponents use ESPN abbreviations to fit the header; their full names are available on hover.
+- Football and men’s basketball use the current AP poll where available, plus SEC standing. Baseball can use a recent ESPN game ranking; obsolete SEC East/West standing labels are suppressed. Professional teams use ESPN’s division standing. Missing values are labeled unavailable, never inferred as zero or unranked.
+- **In-season rule:** show a team from its first regular-season game date through the last known regular-season/postseason game date, plus a seven-day grace period for the final result and pending playoff pairings. Bye weeks and scheduled playoff gaps remain active. Preseason/exhibitions do not count. This is a schedule-based approximation; an unannounced playoff game may temporarily leave a team hidden until the schedule appears.
+- Only completed games can supply the last score; live scores are never displayed. Next game means the next future scheduled game, excluding canceled/postponed/in-progress games. If its time is unconfirmed, show “Time TBD”; if no next game is announced, show “Not yet scheduled.”
+- Team data refreshes about every 30 minutes, with season visibility rechecked every minute. Off-season cards disappear automatically. If all seven teams are off-season, the other available categories continue rotating without a sports placeholder.
 - The Monday–Sunday calendar, photo shuffle, 60-second default photo interval, nebula animation, and monitor schedule remain in place.
 
 ## Preview first
 
 The prepared local preview uses **http://127.0.0.1:5174/**. The original preview uses port 5173. Preview calendar events are labeled samples. Public highlights are real fetched content; the preview does not connect to the private calendar.
 
-The first fetch can take a few minutes on a slow connection. Quotes appear immediately; other categories appear as their feeds load. Subsequent startup uses the saved highlights cache.
+The first fetch can take a minute or two on a slow connection. Quotes appear immediately; other categories appear as their feeds load. Subsequent startup uses the saved highlights cache. The old league-wide score cache is discarded automatically when upgrading to team cards.
 
 ## Upgrade an existing Pi
 
@@ -64,15 +65,16 @@ Follow `README.md` for Raspberry Pi OS, desktop auto-login, HDMI, and iCloud set
 - History: [Wikipedia On This Day](https://en.wikipedia.org/api/rest_v1/feed/onthisday/events/09/18), using the actual month/day, limited to complete short entries. Attribution: Wikipedia contributors, [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/). Displayed wording is retained, with whitespace normalized and the year displayed separately. Facts link to the date’s Events section.
 - Fun Observances: [Checkiday](https://www.checkiday.com/), using its currently accessible legacy daily feed. Names link to the source’s detail pages. These include unofficial celebrations and awareness days, not just official holidays. The legacy feed has no uptime guarantee; [Checkiday’s supported API plans](https://www.checkiday.com/developers.php) are a possible future replacement.
 - Quotes: excerpts checked against public-domain books hosted by [Project Gutenberg](https://www.gutenberg.org/). The source collection is `pi/quotes.json`; fictional dialogue also names the speaker in the source label.
-- Scores: ESPN’s public scoreboard feeds. These are undocumented endpoints and can change. No API key is currently needed. Each result links to ESPN; this is not an ESPN-sponsored product.
+- Sports: ESPN’s public team, schedule, and rankings feeds. These are undocumented endpoints and can change. No API key is currently needed. Each team card links to ESPN; this is not an ESPN-sponsored product.
 
 The Pi fetches and caches public data; the browser only contacts the Pi. No calendar events, Apple credentials, or family photos are sent to these sources. Requests contain dates and league identifiers.
 
-If a daily source fails, it retries after 30 minutes and its category is skipped. Yesterday’s history/observances are never labeled as today’s. Quotes still work offline. Recent saved sports results can remain visible with “saved result” until they age out of the seven-day window. Sources do not block the calendar, photos, or monitor-control worker.
+If a daily source fails, it retries after 30 minutes and its category is skipped. Yesterday’s history/observances are never labeled as today’s. Quotes still work offline. Saved team data can remain visible with “saved data” for up to 24 hours, still subject to the season rule; older data is hidden. Sources do not block the calendar, photos, or monitor-control worker.
 
 ## Files and development
 
-- `pi/highlights.py`: data sources, daily limits, final-score filtering, separate cache.
+- `pi/highlights.py`: data sources, daily limits, separate cache and team refresh scheduling.
+- `pi/team_sports.py`: seven-team identities, records, rankings, schedules, season filtering, last/next games.
 - `pi/quotes.json`: verified source-attributed quotation collection.
 - `components/daily-highlights.tsx`: card and 15-second timer.
 - `lib/highlight-order.ts`: shuffle and balanced category rotation.

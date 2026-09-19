@@ -1,6 +1,7 @@
 export type Highlight = {
   id: string; category: 'history' | 'observances' | 'quotes' | 'sports';
   text: string; detail: string; source: string; url: string; cached?: boolean;
+  team?: {name: string; record: string; standing: string; last: string; next: string; last_title: string; next_title: string};
 };
 
 function shuffle<T>(values: T[], random: () => number): T[] {
