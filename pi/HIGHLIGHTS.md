@@ -98,3 +98,13 @@ Existing user desktop settings are preserved and backed up to `~/.config/labwc/r
 The rule remains after release rollback but only matches the new `family-wall` browser class. Older launchers do not use that class. To remove the safeguard from a current release, remove its `windowRule identifier="family-wall"` element and the launcher rule-install block/class argument.
 
 Reference: https://labwc.github.io/labwc-config.5.html and https://labwc.github.io/labwc-actions.5.html . Physical Pi startup and sleep/wake behavior must be checked after installation.
+
+## Memory reduction and crashed-tab recovery
+
+Photos now use a 1280-pixel longest-side limit. JPEG draft decoding and resizing happen before orientation/color copies. Existing larger cached images shrink during the next successful photo sync. iCloud originals are unchanged. Sources over 40 million pixels are rejected to limit decode spikes.
+
+Scheduled sleep pauses photo/highlight rotation and calendar scrolling, removes the displayed photo and nebula layer, and pauses CSS animations. API polling and the local kiosk heartbeat continue. Failed photos wait for the regular timer instead of rapidly cycling through failures.
+
+The launcher runs a browser supervisor. If the page heartbeat is missing for 180 seconds while the local API responds, it restarts the browser process group. It also retries browser exits after 10 seconds. It exposes no browser debugging port; the heartbeat endpoint is loopback-only and only the kiosk URL sends it. The supervisor uses the standard ~/.config/family-wall data location. Server outages do not trigger repeated browser restarts.
+
+Validation: 41 Python tests, 10 JavaScript tests, TypeScript check, production build and ZIP integrity passed locally. Recovery process control uses mocked processes in tests. Physical Pi overnight memory use and wake behavior still need validation. The observed OOM has not been isolated to a single activity.
