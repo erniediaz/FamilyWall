@@ -332,6 +332,11 @@ class Handler(BaseHTTPRequestHandler):
             self.end_headers();return
         if not self.authorized():
             self.send(401,b'Open the private dashboard link printed during setup.','text/plain');return
+        if parsed.path=='/api/kiosk-heartbeat':
+            if not ipaddress.ip_address(self.client_address[0]).is_loopback:
+                self.send(403,{'error':'Local kiosk only'});return
+            (self.wall.folder/'kiosk-heartbeat').touch(mode=0o600)
+            self.send(200,{'ok':True});return
         if parsed.path=='/api/state':self.send(200,self.wall.snapshot());return
         if parsed.path.startswith('/api/'):
             self.send(404,{'error':'Not found'});return

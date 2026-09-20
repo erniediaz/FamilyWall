@@ -11,7 +11,7 @@ from datetime import datetime
 from pathlib import Path
 from urllib.request import urlopen
 
-FILES = ('server.py', 'photos.py', 'highlights.py', 'team_sports.py', 'quotes.json', 'kiosk.sh','window_rule.py', 'THIRD-PARTY-NOTICES', 'release.py')
+FILES = ('server.py', 'photos.py', 'highlights.py', 'team_sports.py', 'quotes.json', 'kiosk.sh','window_rule.py','browser_watchdog.py', 'THIRD-PARTY-NOTICES', 'release.py')
 
 
 def switch(base, target):

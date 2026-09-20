@@ -27,7 +27,7 @@ if [ -n "$output" ]; then
     wlr-randr --output "$output" --mode 1920x1080 || true
 fi
 until curl --silent --fail http://127.0.0.1:8080/api/state >/dev/null; do sleep 2; done
-exec chromium --class=family-wall --kiosk --no-first-run --noerrdialogs --disable-session-crashed-bubble \
+exec python3 "$(dirname -- "$0")/browser_watchdog.py" chromium --class=family-wall --kiosk --no-first-run --noerrdialogs --disable-session-crashed-bubble \
   --user-data-dir="$HOME/.config/family-wall/chromium" \
   --ozone-platform=wayland --password-store=basic \
-  http://127.0.0.1:8080/
+  http://127.0.0.1:8080/?kiosk=1

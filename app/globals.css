@@ -105,3 +105,7 @@ body{background:#000}
  .brand{flex-basis:100%}.daily-highlights{order:4;flex-basis:100%;max-width:none;height:158px}
  .highlight-text{height:64px;-webkit-line-clamp:3;font-size:16px}.highlight-detail{display:block}.highlight-detail>a{display:block;max-width:100%;margin-top:4px}
 }
+
+/* Release animation/compositing work while the physical monitor sleeps. */
+.display-asleep *, .display-asleep *::before, .display-asleep *::after { animation-play-state: paused !important; }
+.display-asleep .wall::before, .display-asleep .wall::after { display: none; }

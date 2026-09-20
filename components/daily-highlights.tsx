@@ -8,7 +8,7 @@ const EMPTY: Highlight[] = [];
 const labels = {history: 'On this day', observances: 'Fun observances', quotes: 'A little perspective', sports: 'Your teams'};
 const icons = {history: BookOpen, observances: Sparkles, quotes: Quote, sports: Trophy};
 
-export function DailyHighlights({data, today}: {data?: HighlightsData; today: string}) {
+export function DailyHighlights({data, today, sleeping=false}: {data?: HighlightsData; today: string; sleeping?: boolean}) {
   const items = data?.day === today ? data.items : EMPTY;
   const latest = useRef(items);
   latest.current = items;
@@ -39,10 +39,10 @@ export function DailyHighlights({data, today}: {data?: HighlightsData; today: st
   }, [items, active, today]);
   // Polling the API never resets this timer or the current card.
   useEffect(() => {
-    if (paused) return;
+    if (paused || sleeping) return;
     const timer = setInterval(() => next.current(), HIGHLIGHT_INTERVAL);
     return () => clearInterval(timer);
-  }, [paused]);
+  }, [paused, sleeping]);
   const row = items.find(item => item.id === active);
   const Icon = row ? icons[row.category] : Sparkles;
   return <section className={'daily-highlights ' + (row?.category || '')} aria-label="Daily highlights">

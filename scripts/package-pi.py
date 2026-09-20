@@ -13,7 +13,7 @@ out=root.parent/'deliverables'
 out.mkdir(exist_ok=True)
 archive=out/'Family-Wall-Highlights-Pi.zip'
 files={}
-for name in ['server.py','photos.py','highlights.py','team_sports.py','quotes.json','release.py','kiosk.sh','window_rule.py','install.sh','README.md','HIGHLIGHTS.md','VALIDATION.md','THIRD-PARTY-NOTICES']:
+for name in ['server.py','photos.py','highlights.py','team_sports.py','quotes.json','release.py','kiosk.sh','window_rule.py','browser_watchdog.py','install.sh','README.md','HIGHLIGHTS.md','VALIDATION.md','THIRD-PARTY-NOTICES']:
     files['family-wall/'+name]=root/'pi'/name
 for path in web.rglob('*'):
     if path.is_file():files['family-wall/web/'+str(path.relative_to(web))]=path

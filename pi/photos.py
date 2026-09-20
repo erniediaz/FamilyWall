@@ -86,6 +86,20 @@ def list_photos(shared_url):
             payload['continuationMarker']=marker
         raise ValueError('Album exceeds pagination limit')
 
+def resize_photo(source, path):
+    """Shrink before orientation/color copies; JPEG draft avoids full-size decode."""
+    with Image.open(source) as original:
+        if original.width * original.height > 40_000_000:
+            raise ValueError('Photo dimensions exceed the Pi decode limit')
+        original.draft('RGB', (1280, 1280))
+        original.thumbnail((1280, 1280))
+        with ImageOps.exif_transpose(original) as oriented:
+            with oriented.convert('RGB') as image:
+                temp = path.with_suffix('.tmp')
+                image.save(temp, format='JPEG', quality=85)
+                temp.replace(path)
+
+
 def sync_photos(shared_url, destination, limit=500):
     destination=Path(destination)
     destination.mkdir(parents=True,exist_ok=True,mode=0o700)
@@ -106,15 +120,18 @@ def sync_photos(shared_url, destination, limit=500):
                         content.extend(part)
                         if len(content)>30*1024*1024:
                             raise ValueError('Photo too large')
-                with Image.open(io.BytesIO(content)) as original:
-                    im=ImageOps.exif_transpose(original).convert('RGB')
-                    im.thumbnail((1920,1920))
-                    temp=path.with_suffix('.tmp')
-                    im.save(temp,format='JPEG',quality=88)
-                    temp.replace(path)
+                resize_photo(io.BytesIO(content), path)
             except Exception:
                 failures+=1
                 continue
+        try:
+            with Image.open(path) as cached:
+                oversized = max(cached.size) > 1280
+            if oversized:
+                resize_photo(path, path)
+        except Exception:
+            failures += 1
+            continue
         filenames.append(name)
     if failures:
         # Retain the previous complete cache if a sync is incomplete.
