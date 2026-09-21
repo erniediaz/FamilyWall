@@ -22,26 +22,47 @@ class MemoryRecovery(unittest.TestCase):
                 self.assertGreater(image.height, image.width)
                 self.assertEqual(image.mode, 'RGB')
 
-    def test_missing_heartbeat_restarts_process_group(self):
+    def test_sleep_wake_recovery_and_outage(self):
         with tempfile.TemporaryDirectory() as folder:
+            heartbeat = Path(folder) / 'heartbeat'
             process = Mock(pid=1234)
             process.poll.return_value = None
-            response = Mock(status=200)
-            response.__enter__ = Mock(return_value=response)
-            response.__exit__ = Mock(return_value=False)
-            with patch.object(watchdog.Path, 'home', return_value=Path(folder)), patch.object(watchdog.signal, 'signal'), patch.object(watchdog.subprocess, 'Popen', return_value=process), patch.object(watchdog.time, 'monotonic', side_effect=[0, 181]), patch.object(watchdog.time, 'sleep', side_effect=[None, SystemExit]), patch.object(watchdog, 'urlopen', return_value=response), patch.object(watchdog.os, 'killpg') as kill:
-                with self.assertRaises(SystemExit):
-                    watchdog.main()
-                kill.assert_any_call(1234, watchdog.signal.SIGTERM)
+            with patch.object(watchdog.subprocess, 'Popen', return_value=process) as launch, patch.object(watchdog, 'terminate') as stop:
+                supervisor = watchdog.Supervisor(['chromium'], heartbeat)
+                supervisor.tick(False, 0)
+                supervisor.tick(False, 1000)
+                launch.assert_not_called()
+                supervisor.tick(True, 1001)
+                launch.assert_not_called()
+                supervisor.tick(True, 1006)
+                self.assertEqual(launch.call_count, 1)
+                supervisor.tick(None, 1400)
+                stop.assert_not_called()
+                heartbeat.touch()
+                supervisor.tick(True, 1401)
+                stop.assert_not_called()
+                supervisor.tick(True, 1582)
+                stop.assert_called_once_with(process)
+                supervisor.tick(False, 1600)
+                supervisor.tick(False, 2000)
+                self.assertEqual(launch.call_count, 1)
+                supervisor.tick(True, 2001)
+                supervisor.tick(True, 2006)
+                self.assertEqual(launch.call_count, 2)
+                supervisor.tick(False, 2010)
+                self.assertIsNone(supervisor.process)
 
-    def test_server_outage_does_not_trigger_browser_restart(self):
-        with tempfile.TemporaryDirectory() as folder:
-            process = Mock(pid=1234)
-            process.poll.return_value = None
-            def offline(*args, **kwargs):
-                kill.assert_not_called()
-                raise OSError('offline')
-            with patch.object(watchdog.Path, 'home', return_value=Path(folder)), patch.object(watchdog.signal, 'signal'), patch.object(watchdog.subprocess, 'Popen', return_value=process), patch.object(watchdog.time, 'monotonic', side_effect=[0, 181, 192]), patch.object(watchdog.time, 'sleep', side_effect=[None, None, SystemExit]), patch.object(watchdog, 'urlopen', side_effect=offline) as request, patch.object(watchdog.os, 'killpg') as kill:
-                with self.assertRaises(SystemExit):
-                    watchdog.main()
-                self.assertEqual(request.call_count, 2)
+    def test_display_must_be_observed_awake(self):
+        import io
+        def response(on, error=None):
+            import json
+            return io.BytesIO(json.dumps({'display': {'on': on, 'error': error}}).encode())
+        with patch.object(watchdog, 'urlopen', side_effect=lambda *a, **k: response(True)), patch.object(watchdog.subprocess, 'run', return_value=Mock(stdout='HDMI-A-1 off')) as command:
+            self.assertIsNone(watchdog.display_ready())
+            command.return_value.stdout = 'HDMI-A-1 on'
+            self.assertIs(watchdog.display_ready(), True)
+        with patch.object(watchdog, 'urlopen', return_value=response(False)), patch.object(watchdog.subprocess, 'run') as command:
+            self.assertIs(watchdog.display_ready(), False)
+            command.assert_not_called()
+        with patch.object(watchdog, 'urlopen', side_effect=OSError):
+            self.assertIsNone(watchdog.display_ready())

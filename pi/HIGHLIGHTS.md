@@ -108,3 +108,11 @@ Scheduled sleep pauses photo/highlight rotation and calendar scrolling, removes 
 The launcher runs a browser supervisor. If the page heartbeat is missing for 180 seconds while the local API responds, it restarts the browser process group. It also retries browser exits after 10 seconds. It exposes no browser debugging port; the heartbeat endpoint is loopback-only and only the kiosk URL sends it. The supervisor uses the standard ~/.config/family-wall data location. Server outages do not trigger repeated browser restarts.
 
 Validation: 41 Python tests, 10 JavaScript tests, TypeScript check, production build and ZIP integrity passed locally. Recovery process control uses mocked processes in tests. Physical Pi overnight memory use and wake behavior still need validation. The observed OOM has not been isolated to a single activity.
+
+## Browser follows display hours
+
+The supervisor now closes Chromium when the backend reports scheduled sleep and launches it fresh only after `wlopm` reports the monitor on for at least five seconds. It polls every five seconds; display scheduling itself polls every 15 seconds. Manual display overrides use the same behavior. The calendar/photo/weather backend remains running. No whole-Pi reboot or new system timer is added.
+
+Crashed-tab recovery is active only when the display is ready. During an API or monitor-control outage, an existing browser is preserved and no new browser is launched. The supervisor logs browser start, scheduled stop and heartbeat recovery to the kiosk service journal. Startup errors and unavailable monitor queries wait for the next poll.
+
+This supersedes the earlier description of keeping Chromium running through sleep. The physical Pi must still be checked across a sleep/wake cycle. Local validation: 41 Python tests passed, including schedule transitions, heartbeat recovery, outage handling and actual-monitor-state gating.
