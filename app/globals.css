@@ -115,3 +115,17 @@ body{background:#000}
 .current-weather strong{display:inline-block;transform:scale(1.25);transform-origin:center bottom}
 .current-weather .weather-width-reserve{visibility:hidden}
 .current-weather .weather-description{display:block;position:absolute;top:100%;left:0;width:100%;max-width:none;margin:6px 0 0;text-align:center;font-size:16px;line-height:1.2}
+
+/* Invisible original content retains the exact header footprint; the visible
+   reading is centered independently inside that footprint. */
+.current-weather>svg,.current-weather>div:not(.weather-centered){visibility:hidden}
+.current-weather .weather-centered{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.weather-reading{display:flex;align-items:center;justify-content:center;gap:18px}
+.weather-reading>svg{width:48px;height:48px;color:#f9cf70;flex-shrink:0}
+.current-weather .weather-reading strong{font-size:60px;line-height:48px;transform:none}
+.current-weather .weather-centered>span{text-align:center}
+@media(min-width:761px) and (max-width:1350px){
+ .weather-reading{gap:10px}
+ .weather-reading>svg{width:30px;height:30px}
+ .current-weather .weather-reading strong{font-size:45px;line-height:36px}
+}
