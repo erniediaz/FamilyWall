@@ -116,3 +116,9 @@ The supervisor now closes Chromium when the backend reports scheduled sleep and 
 Crashed-tab recovery is active only when the display is ready. During an API or monitor-control outage, an existing browser is preserved and no new browser is launched. The supervisor logs browser start, scheduled stop and heartbeat recovery to the kiosk service journal. Startup errors and unavailable monitor queries wait for the next poll.
 
 This supersedes the earlier description of keeping Chromium running through sleep. The physical Pi must still be checked across a sleep/wake cycle. Local validation: 41 Python tests passed, including schedule transitions, heartbeat recovery, outage handling and actual-monitor-state gating.
+
+## Date-formatting allocation fix
+
+The dashboard reuses date/time formatters instead of constructing them for every event/day check and render. Event-time formatter caching is bounded to eight time zones. Calendar grouping and event time labels are memoized until calendar data changes. The clock timer still checks each second, but only changes React state when the displayed minute changes. Existing layout, timezone formatting, event ranges, photos and display schedule are retained.
+
+Validation: 41 Python tests, 11 JavaScript tests, TypeScript and production export passed. A 20,000-call event-time test constructs only three formatter objects for one time zone. This proves allocation reduction, not elimination of the Chromium crash: physical Pi memory usage over a full viewing period remains unverified.
