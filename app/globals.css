@@ -109,3 +109,9 @@ body{background:#000}
 /* Release animation/compositing work while the physical monitor sleeps. */
 .display-asleep *, .display-asleep *::before, .display-asleep *::after { animation-play-state: paused !important; }
 .display-asleep .wall::before, .display-asleep .wall::after { display: none; }
+
+/* Preserve the header's layout dimensions while enlarging the temperature. */
+.current-weather{position:relative}
+.current-weather strong{display:inline-block;transform:scale(1.25);transform-origin:center bottom}
+.current-weather .weather-width-reserve{visibility:hidden}
+.current-weather .weather-description{display:block;position:absolute;top:100%;left:0;width:100%;max-width:none;margin:6px 0 0;text-align:center;font-size:16px;line-height:1.2}
